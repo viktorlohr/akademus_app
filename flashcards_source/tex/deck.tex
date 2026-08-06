@@ -1,0 +1,1695 @@
+% ---------------------------------------------------------------------
+% praeambel_app_standalone.tex
+% ---------------------------------------------------------------------
+
+% ---- Page shape ----
+% ---- Display-Format für Smartphones (z. B. 90mm x 160mm) ----
+\usepackage[
+    paperwidth=105mm,
+    paperheight=148mm,
+    margin=5mm
+]{geometry}
+
+% font
+\usepackage[sfdefault]{roboto}
+\usepackage[T1]{fontenc}
+\usepackage{eulervm}
+
+
+% ---- Language / Encoding ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}   
+
+% ---- Math ----
+\usepackage{amsmath}          
+\usepackage{amssymb}          
+\usepackage{extarrows}        
+
+% ---- Tables ----
+\usepackage{array}            
+\usepackage{tabularx}
+\usepackage{diagbox}          
+
+% Defined custom column type 'C' for fixed-width centered columns (e.g. NEWNEWNEW rule)
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ---- Graphics / Diagrams ----
+\usepackage{graphicx}         
+\usepackage{tikz}             
+\usetikzlibrary{patterns}
+
+% ---- Custom Math Commands ----
+\newcommand{\R}{\mathbb{R}}                     
+\newcommand{\D}{\mathbb{D}}                     
+\newcommand{\abs}[1]{\left|#1\right|}           
+\newcommand{\mal}{\cdot}                        
+\newcommand{\std}{\sigma}                       
+
+% ---- Card Environments ----
+% ---- Card Environments (für Mobilgeräte optimiert) ----
+\newenvironment{frage}{%
+	\clearpage
+	\vspace*{\fill}
+	\begin{center}\huge
+}{%
+	\end{center}
+	\vspace*{\fill}
+}
+
+\newenvironment{antwort}{%
+	\clearpage
+	\vspace*{\fill}
+	\begin{center}\large
+}{%
+	\end{center}
+	\vspace*{\fill}
+}
+\begin{frage}Nullstellen einer Funktion?\end{frage}
+\begin{antwort}Ansatz: Funktion mit 0 gleichsetzen
+	\[
+	f(x)=0
+	\]\end{antwort}
+\begin{frage}Nullstellen: Lineare Funktion
+		
+	z.B.: $f(x)=4x-12$\end{frage}
+\begin{antwort}Einfach umstellen:
+	\begin{align*}
+	4x-12&=0 \\
+	4x&=12 \\
+	x&=3
+	\end{align*}\end{antwort}
+\begin{frage}Nullstellen: Quadratische Funktion
+	\[
+		f(x)=2x^2+6x-8
+	\]\end{frage}
+\begin{antwort}\[
+		2x^2+6x-8=0
+		\]
+	"`Mitternachtsformel"'
+	\[
+		x_{1,2}=\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+	\]
+	\[
+	x_{1,2}=\frac{-6\pm\sqrt{6^2-4\cdot2\cdot(-8)}}{2\cdot2 }
+	\]
+	\[
+	x_{1}=1,\;x_{2}=-4
+	\]\end{antwort}
+\begin{frage}Nullstellen: Funktion 3. Grades\end{frage}
+\begin{antwort}\normalsize\begin{enumerate}
+		\item Schritt: $x$ Ausklammern
+		\item Schritt: Mitternachtsformel in der Klammer anwenden
+	\end{enumerate}
+	\normalsize\begin{align*}
+		2x^3+2x^2-24x&=0\\
+		x\cdot(2x^2+2x-24)&=0\\
+		=>	x_{1}&= 0\\
+		x_{2,3}&= \text{Mitternachtsformel}\\
+		=>	x_{2}=3,\;x_{3}&=-4
+	\end{align*}\end{antwort}
+\begin{frage}Nullstellen: Funktion 3. Grades
+	\[
+	f(x)=3x^3+81
+	\]\end{frage}
+\begin{antwort}Auflösen:
+	\begin{align*}
+		3x^3+81&=0 \\
+		3x^3&=-81 \\
+		x^3&=-27 \\
+		x&=\sqrt[3]{-27}=-9
+	\end{align*}
+	\normalsize
+	(Die Wurzel einer negativen Zahl ist hier möglich, da es eine ungerade Wurzel ist)\end{antwort}
+\begin{frage}Nullstellen: Gebrochene Funktion
+	\[
+	f(x)=\frac{4x-12}{x^2-4}
+	\]\end{frage}
+\begin{antwort}Zähler mit 0 gleichsetzen:
+	\begin{align*}
+	4x-12&=0 \\
+	x&=3
+	\end{align*}\end{antwort}
+\begin{frage}Nullstellen: e-Funktion
+	\[
+	f(x)=(2x-4)\cdot{e^{3x+4}}
+	\]\end{frage}
+\begin{antwort}"`e kann niemals 0 werden!"'
+	\[
+	{e^{3x+4}}\neq0
+	\]
+	"`Also kann nur der Faktor in der Klammer 0 werden!"'
+	\begin{align*}
+	2x-4&=0 \\
+	x&=2
+	\end{align*}\end{antwort}
+\begin{frage}Nullstellen: ln-Funktion
+	\[
+	f(x)=ln(2x-5)
+	\]\end{frage}
+\begin{antwort}\begin{align*}
+		ln(2x-5)&=0\\
+		{e^{ln(2x-5)}}&=e^0\\
+		2x-5&=1\\
+		x&=3
+	\end{align*}\end{antwort}
+\begin{frage}Definitionsmenge\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Der Nenner muss ungleich 0 sein: $N \neq 0$
+		\item Unter einer Wurzel müssen Werte größer oder gleich 0 sein: $\sqrt{\ge 0}$
+		\item Im $ln$ muss immer etwas größeres als 0 stehen: $ln(>0)$
+	\end{enumerate}\end{antwort}
+\begin{frage}Definitionsmenge angeben:
+	\begin{align*}
+	     f_1(x)&=\frac{4x-12}{x-4} \\
+		 f_2(x)&=\sqrt{2x-8}\\
+		 f_3(x)&=ln(x+1)
+	\end{align*}\end{frage}
+\begin{antwort}\begin{align*}
+	   	  \D_{f_1}&=\R\big\backslash\big\{4\big\} \\
+		  \D_{f_2}&=[4;\infty[ \\
+		  \D_{f_3}&=]-1;\infty[ 
+	\end{align*}\end{antwort}
+\begin{frage}Wertemenge\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Berechne die Grenzen an den Rändern des Definitionsbereichs: $\lim\limits_{x \rightarrow\pm\infty}{f(x)}$
+		\item Berechne die Extrema inklusive y-Wert.
+		\item Erstelle eine Skizze mit den aus 1. und 2. berechneten Werten.
+	\end{enumerate}\end{antwort}
+\begin{frage}$x$-Achsenschnittpunkte\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Setze $f(x)=0$ (für die Nullstellen)
+		\item Löse Gleichung nach $x$ auf
+		\item Schreibe die Ergebnisse als Punkte; z.B. N(7|0)
+	\end{enumerate}\end{antwort}
+\begin{frage}$y$-Achsenschnittpunkt\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item $f(0)$ bestimmen; setze $0$ in $f(x)$ ein
+		\item Schreibe das Ergebnis als Punkt; z.B. S(0|7)
+	\end{enumerate}\end{antwort}
+\begin{frage}Symmetrie einer Funktion untersuchen\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Setze $-x$ in die Funktion $f$ ein: $f(-x)$
+		\item Vereinfache die Funktion
+		\item Falls $f(-x)=f(x)$ dann liegt Achsensymmetrie zur y-Achse vor. Falls $f(-x)=-f(x)$ dann liegt Punktsymmetrie zum Ursprung vor.
+	\end{enumerate}\end{antwort}
+\begin{frage}Gib je ein Beispiel für eine achsensymmetrische Funktion zur y-Achse und für eine punktsymmetrische Funktion zum Ursprung an.\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Achsensymmetrisch zur y-Achse: $f(x)=x^2$
+		\item Punktsymmetrisch zum Ursprung: $f(x)=x^3$
+	\end{enumerate}\end{antwort}
+\begin{frage}Waagrechte Asymptoten (beliebige Funktion)\end{frage}
+\begin{antwort}\begin{enumerate} 
+		\item Berechne $\lim\limits_{x \rightarrow \infty}{f(x)}$ und $\lim\limits_{x \rightarrow -\infty}{f(x)}$	
+		
+		\item Wenn eine Zahl rauskommt, dann lautet die waagrechte Asymptote y = \textbf{diese Zahl}
+		
+		\item Wenn $\infty$ oder  $-\infty$ rauskommt, gibt es keine waagrechten Asymptoten.
+			
+	\end{enumerate}\end{antwort}
+\begin{frage}Waagrechte Asymptoten (gebrochenrationale Funktion)\bigskip
+	
+	Bsp: $f(x)=\frac{2x^2-1}{3x+1}$\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item \large Wenn der Zählergrad einer \textbf{echt}gebrochenrationalen Funktion genau dem Nennergrad entspricht, dann gibt es eine waagrechte Asymptote.	
+		\item Berechne dafür den Quotienten der Leitkoeffizienten: $y=\frac{2}{3}$	
+	\end{itemize}\end{antwort}
+\begin{frage}Senkrechte Asymptoten (gebrochenrationale Funktionen)\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item \large Bei den Definitionslücken der gebrochenrationalen Funktion, sind auch die senkrechten Asymptoten.		
+		\item senkrechte Asymptote: x= \textbf{Definitionslücke}		
+	\end{itemize}\end{antwort}
+\begin{frage}Änderung der Darstellungsform \bigskip
+	
+	Bsp: 
+	\begin{align*}
+	f(x)&=2x -4 +\frac{3}{x+1}\\
+	&=\frac{2x^2-2x-1}{x+1}
+	\end{align*}\end{frage}
+\begin{antwort}\large Es ist immer leichter den teilweise gekürzten Term zu erweitern auf eine echt gebrochene Darstellung.
+		
+	\begin{align*}
+		2x-4&=\frac{(2x-4)\cdot(x+1)+3}{x+1} \\
+		&=\frac{2x^2+2x-4x-4+3}{x+1} \\
+		&=\frac{2x^2-2x-1}{x+1}
+	\end{align*}\end{antwort}
+\begin{frage}Schräge Asymptoten \bigskip
+	
+	Bsp: $f(x)=2x -4 +\frac{3}{x+1}$\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item \large Wenn der Zählergrad einer \textbf{echt}gebrochenrationalen Funktion genau um 1 größer ist als der Nennergrad, dann gibt es eine schräge Asymptote.		
+		
+		\item Die schräge Asymptote kann leicht ausgelesen werden, sobald die Funktion folgende Form hat: 
+		
+		$f(x)=\textbf{ax+b} + \frac{\text{Zählergrad}}{\text{Nennergrad}}$ 
+		(wobei Zählergrad < Nennergrad).
+		
+		$\text{Asymptote: } y=\textbf{ax+b}.$	
+		
+		Im Beispiel: $\textbf {y=2x-4}$
+	\end{itemize}\end{antwort}
+\begin{frage}\LARGE Gib den Term einer gebrochen-rationalen Funktion an, die
+	\begin{itemize} \large
+		\item bei x=2 eine senkrechte Asymptote hat,		
+		\item bei x=3 einen Pol ohne Vorzeichenwechsel hat, 
+		\item bei x=4 einen Pol mit Vorzeichenwechsel hat,
+		\item bei x=5 eine berührende Nullstelle hat,			
+	\end{itemize}\end{frage}
+\begin{antwort}\LARGE 
+	\[ f(x)=\frac{ (x-5)^2 }{N(x)} \]
+	\normalsize mit $N(x)=(x-2) \cdot (x-3)^2 \cdot (x-4)$\end{antwort}
+\begin{frage}\LARGE Gib den Term einer gebrochen-rationalen Funktion an, die
+	\begin{itemize} \large
+		\item bei y=2 eine waagrechte Asymptote hat,		
+		\item bei x=3 einen Pol mit Vorzeichenwechsel hat, 
+		\item bei x=4 einen Pol ohne Vorzeichenwechsel hat.	
+		
+	\end{itemize}\end{frage}
+\begin{antwort}\LARGE 
+	\[ f(x)=\frac{ 2x^3}{N(x)} \]
+	\normalsize mit $N(x)=(x-3) \cdot (x-4)^2$\end{antwort}
+\begin{frage}Verschiebung und Streckung von Funktionen  \bigskip
+	
+	$f(x)=a \cdot f(b(x+c))+d$\end{frage}
+\begin{antwort}\large
+	$f(x)=a \cdot f(b(x+c))+d$
+	\begin{itemize}
+
+		\item a: Streckung in y-Richtung um den Faktor a
+		\item b: Streckung in x-Richtung um Faktor $\mathbf{\frac{1}{b}}$
+		\item c: Verschiebung um \textbf{-c} in x-Richtung
+		\item d: Verschiebung um d in y-Richtung
+							
+	\end{itemize}
+	\textbf{Beachte:} Gilt für alle Funktionen.\\
+	 Zuerst Streckungen dann Verschiebungen!\end{antwort}
+\begin{frage}Wie geht die Funktion $f(x)=2 \cdot ln(x-3)+4$ aus der 
+	Funktion $g(x)=ln(x)$ hervor?\end{frage}
+\begin{antwort}$f(x)=2 \cdot ln(x-3)+4$
+	\begin{itemize}
+		\item $a=2;b=1;c=-3;d=4$
+		\item Streckung in y-Richtung um den Faktor 2		
+		\item Verschiebung um 3 nach \textbf{rechts}
+		\item Verschiebung um 4 nach oben							
+	\end{itemize}\end{antwort}
+\begin{frage}Ableitregel für Polynome
+	
+	z.B.: $f(x)=3x^4+2x^3-7$\end{frage}
+\begin{antwort}Ableitregel Polynome:
+	\begin{align*}
+	f(x) &= n \cdot x^m \\
+	f'(x) &= nm \cdot x^{m-1}
+	\end{align*}
+	Im Beispiel:
+	\[
+	f'(x)=12x^3+6x^2
+	\]\end{antwort}
+\begin{frage}Produktregel
+	
+	z.B.: $f(x)=sin(x)\cdot2x^3$\end{frage}
+\begin{antwort}Produktregel:
+	\begin{align*}
+	f(x) &= u(x)\cdot v(x) \\
+	f'(x)&=u'(x)\cdot v(x)+u(x)\cdot v'(x)
+	\end{align*}
+	Im Beispiel:
+	\begin{align*}
+	f'(x)&=cos(x)\cdot 2x^3 \\
+	&\quad+ sin(x)\cdot 6x^2
+	\end{align*}\end{antwort}
+\begin{frage}Quotientenregel
+	
+	z.B.: $f(x)=\frac{sin(x)}{3x^2}$\end{frage}
+\begin{antwort}Quotientenregel:
+	\normalsize
+	\[
+	\frac{N \cdot Z' - Z \cdot N'}{N^2}
+	\]
+	\scriptsize (N = Nenner, Z = Zähler, N' = Ableitung Nenner, Z' = Ableitung Zähler)
+	
+	\Large
+	Im Beispiel:
+	\[
+	f'(x)=\frac{3x^2 \cdot cos(x) - sin(x) \cdot (6x)}{(3x^2)^2}
+	\]\end{antwort}
+\begin{frage}Kettenregel
+	
+	z.B.: $f(x)={sin(3x^2)}$\end{frage}
+\begin{antwort}Kettenregel:
+	\[
+	(f(g(x)))'=f'(g(x))\cdot g'(x)
+	\]
+	Im Beispiel:
+	\begin{align*}
+	f(x)&=sin(x);~ g(x)=3x^2 \\
+	f'(x)&=cos(3x^2)\cdot 6x
+	\end{align*}\end{antwort}
+\begin{frage}Grenzwerte: $\lim\limits_{x \rightarrow \pm\infty}{f(x)}$
+	\bigskip
+	
+	bei gebrochen-rationalen Funktionen
+	
+	(Tipp: 3 Möglichkeiten!)\end{frage}
+\begin{antwort}\large
+	\begin{align*}
+	\lim\limits_{x \rightarrow \pm\infty}{\frac{4x^3 - 6x}{2x^2+4x-1}}&=\pm\infty^* \\
+	\text{(Zählergrad } &> \text{Nennergrad)}
+	\end{align*}
+	\begin{align*}
+	\lim\limits_{x \rightarrow \pm\infty}{\frac{5x^2+6x+4}{2x^4-6x}}&=0 \\
+	\text{(Zählergrad } &< \text{Nennergrad)}
+	\end{align*}
+	\begin{align*}
+	\lim\limits_{x \rightarrow \pm\infty}{\frac{\textbf{-2}x^3+4x}{\textbf{5}x^3 - 6x+1}}&=\frac{\textbf{-2}}{\textbf{5}} \\
+	\text{(Zählergrad } &= \text{Nennergrad)}
+	\end{align*}
+	\footnotesize 
+	*Für das Vorzeichen: Jeweils +100 und -100 in f(x) einsetzen\end{antwort}
+\begin{frage}Bestimme die Gleichung der Tangente an die Funktion $f$ an der Stelle (z.B.) x=7\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item $m=f'(7)$
+		\item $y=f(7)$
+		\item $m$, $y$ und $x(=7)$ in $y= mx+t$ einsetzen und nach $t$ auflösen.
+		\item Fertige Tangentengleichung $y= mx+t$ angeben. (Für y und x keine Zahlen einsetzen!)
+		
+	\end{enumerate}\end{antwort}
+\begin{frage}Umrechnung von Steigung und Winkel\end{frage}
+\begin{antwort}\begin{align*}
+	 m&=tan(\alpha) \\
+	 \alpha&=tan^{-1}(m)
+	 \end{align*}\end{antwort}
+\begin{frage}Gib ein Beispiel für eine Funktion an, die in $x=13$ nicht differenzierbar ist.\end{frage}
+\begin{antwort}$f(x)=|x-13|$
+	\bigskip
+	
+	\begin{center}
+\begin{tikzpicture}[scale=0.55, thick, every node/.style={transform shape, scale=0.85}]
+	% Koordinatensystem zeichnen (Kompakte x-Achse von -1 bis 16.5)
+	\draw[->, >=latex] (-1,0) -- (16.5,0) node[right] {$x$};
+	\draw[->, >=latex] (0,-0.5) -- (0,4.5) node[above] {$y$};
+	
+	% Achsenbeschriftung und Ticks für die x-Achse (0, 5, 10, 13, 15)
+	\foreach \x in {5,10,13,15} {
+		\draw (\x,0.1) -- (\x,-0.1);
+		\node[below=2pt] at (\x,0) {\x};
+	}
+	
+	% Achsenbeschriftung und Ticks für die y-Achse
+	\foreach \y in {2,4} {
+		\draw (0.1,\y) -- (-0.1,\y);
+		\node[left=2pt] at (0,\y) {\y};
+	}
+	\node[below left] at (0,0) {$0$};
+	
+	% Graphen der Betragsfunktion plotten f(x) = |x-13|
+	\draw[domain=9:13, smooth, variable=\x, blue, very thick] plot ({\x}, {13-\x});
+	\draw[domain=13:16, smooth, variable=\x, blue, very thick] plot ({\x}, {\x-13});
+	
+	% Beschriftung des Graphen (deutlich abseits rechts neben der V-Form platziert)
+	\node[blue, right] at (16,3) {$f(x)$};
+\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Kurzcheckup's e-Funktion
+		\begin{enumerate}
+				\item $e^0=$\\
+				\item $e^{ln(13)}=$\\
+				\item $e^\infty=$\\
+				\item $e^{-\infty}=$				
+		\end{enumerate}\end{frage}
+\begin{antwort}\begin{center}
+		$e^0=1$\\
+		$e^{ln(13)}=13$\\
+		$e^\infty=\infty$\\
+		$e^{-\infty}=0$				
+	\end{center}\end{antwort}
+\begin{frage}Kurzcheckup's ln-Funktion
+	\begin{enumerate}
+		\item $ln(1)=$
+		\item $ln(e)=$
+		\item $ln(\infty)=$
+		\item $ln(e^{13})=$				
+	\end{enumerate}\end{frage}
+\begin{antwort}\begin{center}
+		$ln(1)=0$\\
+		$ln(e)=1$\\
+		$ln(\infty)=\infty$\\
+		$ln(e^{13})=13$					
+	\end{center}\end{antwort}
+\begin{frage}Extrema und Monotonie \bigskip 
+	
+	(6 Schritte)\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item $f'(x)$ bestimmen
+		\item Nullstellen der 1. Ableitung (= Extremstellen)
+		\item y-Werte bestimmen (in f(x) einsetzen)
+		\item Monotonietabelle angeben
+		\item Hoch-, Tief- und Terrassenpunkte angeben
+		\item Monotonieintervalle angeben						
+	\end{enumerate}\end{antwort}
+\begin{frage}Wendepunkte und Krümmung \bigskip 
+	
+	(6 Schritte)\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item $f''(x)$ bestimmen
+		\item Nullstellen der 2. Ableitung (= Wendestellen)
+		\item y-Werte bestimmen (in f(x) einsetzen)
+		\item Krümmungstabelle angeben
+		\item Wendepunkte angeben
+		\item Krümmungsintervalle angeben						
+	\end{enumerate}\end{antwort}
+\begin{frage}\large
+	Zusammenhänge zwischen f(x) und f'(x)	
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\draw (0,-0.1) -- (0,2.8);
+		\draw (-2.5,2.6) -- (2.5,2.6) ;
+		\draw (-1,3) node[below left]{$f(x)$}  (1,3) node[below right]{$f'(x)$} ;	
+		\draw (-0.2,2.5) node[below left]{Extrempunkt} (0.2,2.5) node[below right]{} ;
+		\draw (-0.2,2) node[below left]{Wendepunkt} (0.2,2) node[below right]{} ;
+		\draw (-0.2,1.5) node[below left]{monoton steigend} (0.2,1.5) node[below right]{};
+		\draw (-0.2,1) node[below left]{monoton fallend} (0.2,1) node[below right]{};
+		\draw (-0.2,0.5) node[below left]{Grad d. Fkt.} (0.2,0.5) node[below right]{};
+		\draw (-0.2,0.25) node[below left]{(z.B. Parabel)} (0.2,0.25) node[below right]{};
+	\end{tikzpicture}
+	\end{center}\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tikzpicture}[scale=1.5]
+	\draw (0,-0.1) -- (0,2.8);
+	\draw (-2.5,2.6) -- (2.5,2.6) ;
+	\draw (-1,3) node[below left]{$f(x)$}  (1,3) node[below right]{$f'(x)$} ;	
+	\draw (-0.2,2.5) node[below left]{Extrempunkt} (0.2,2.5) node[below right]{Nullstelle} ;
+	\draw (-0.2,2) node[below left]{Wendepunkt} (0.2,2) node[below right]{Extrempunkt} ;
+	\draw (-0.2,1.5) node[below left]{monoton steig.} (0.2,1.5) node[below right]{überhalb x-A.};
+	\draw (-0.2,1) node[below left]{monoton fall.} (0.2,1) node[below right]{unterhalb x-A.};
+	\draw (-0.2,0.5) node[below left]{Grad d. Fkt.} (0.2,0.5) node[below right]{Grad-1 d. Fkt.};
+	\draw (-0.2,0.25) node[below left]{(z.B. Parabel)} (0.2,0.25) node[below right]{(Gerade)};
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Die NEWNEWNEW-Regel\end{frage}
+\begin{antwort}\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c}
+	$F(x)$      & N & E & W &   &   &   \\ \hline
+	$f(x)$      &   & N & E & W &   &   \\ \hline
+	$f'(x)$     &   &   & N & E & W &   \\ \hline
+	$f''(x)$    &   &   &   & N & E & W
+\end{tabular}
+\end{center}\end{antwort}
+\begin{frage}Fläche zwischen zwei Funktionen $f(x)$ und $g(x)$\end{frage}
+\begin{antwort}\large
+		\begin{enumerate} 
+			\item Schnittstellen berechnen: $f(x)=g(x)$
+			
+			Man erhält die Integrationsgrenzen $x_{klein}$ und $x_{gro\text{ß}}$.
+			\item Fläche berechnen: 
+			
+				$A=\abs{\displaystyle\int\limits_{x_{klein}}^{x_{gro\text{ß}}} \! (f(x)-g(x)) \, \mathrm{d}x}$
+			
+			\textbf{Beachte:} \Large Wenn 3 Schnittstellen existieren, Integral aufteilen:
+			
+			\normalsize
+			\begin{align*}
+				&\abs{\displaystyle\int\limits_{x_{klein}}^{x_{mittel}} \! (f(x)-g(x)) \, \mathrm{d}x}\\
+				+&\abs{\displaystyle\int\limits_{x_{mittel}}^{x_{gro\text{ß}}} \! (f(x)-g(x)) \, \mathrm{d}x}
+			\end{align*}
+		\end{enumerate}\end{antwort}
+\begin{frage}Integrale im Sachzusammenhang (d.h. bei Anwendungsaufgaben) deuten\end{frage}
+\begin{antwort}Änderung pro Zeit $\xlongrightarrow{\text{Integrieren}}$ Gesamtänderung 
+	
+	\bigskip Beispiele
+	
+	\large\bigskip
+	$\frac{\text{Schadstoffausstoß}}{\text{Minute}} \xlongrightarrow{\text{Integrieren}}$ \\ Gesamtausstoß im Zeitraum
+	
+	\vspace{0.5cm}
+	
+	$\frac{\text{Rohrdurchfluss}}{\text{Minute}} \xlongrightarrow{\text{Integrieren}}$ \\ Gesamte Wassermenge\end{antwort}
+\begin{frage}Geometrische Interpretation der Vorzeichen von Integralen.\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item Ergebnis ist positiv: Der Flächenanteil oberhalb der x-Achse ist größer als unterhalb der x-Achse.
+		\item Ergebnis ist 0: Der Flächenanteil oberhalb und unterhalb der x-Achse ist gleich groß.
+		\item Ergebnis ist negativ: Der Flächenanteil unterhalb der x-Achse ist größer als oberhalb der x-Achse.
+	\end{itemize}\end{antwort}
+\begin{frage}Die Integralfunktion\end{frage}
+\begin{antwort}\begin{itemize}
+		\item $F_a(x)=\displaystyle\int\limits_{a}^{x} \! f(t) \, \mathrm{d}t$
+		\item a ist immer eine Nullstelle der Integralfunktion
+		\item Deutung: Die Integralfunktion gibt die Flächenbilanz zwischen $f(x)$ und der $x$-Achse von der Nullstelle $a$ bis zu einem beliebigen Wert $x$ an.		
+	\end{itemize}\end{antwort}
+\begin{frage}Zeige, dass $F(x)$ eine Stammfunktion zu $f(x)$ ist\end{frage}
+\begin{antwort}Einfach $F(x)$ ableiten. 
+	
+	Es muss also gelten: F'(x)=f(x)\end{antwort}
+\begin{frage}Bilde folgende Stammfunktionen: 
+	\flushleft 
+	$f_1(x)=6x^2+4x-7$
+	
+	\bigskip
+   	$f_2(x)=cos(x)$
+   	
+   	\bigskip
+	$f_3(x)=sin(x)$\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tikzpicture}[scale=1.7]
+		\draw (0,-0.1) -- (0,2.8);
+		\draw (-2,2.6) -- (2.5,2.6) ;
+		\draw (-1,3) node[below]{$f(x)$}  (1,3) node[below]{$F(x)$} ;	
+		\draw (-0.2,2.5) node[below left]{$6x^2+4x-7$} (0.2,2.5) node[below right]{$2x^3+2x^2-7x+c$} ;
+		\draw (-0.2,2) node[below left]{$cos(x)$} (0.2,2) node[below right]{$sin(x)+c$} ;
+		\draw (-0.2,1.5) node[below left]{$sin(x)$} (0.2,1.5) node[below right]{$-cos(x)+c$};
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Bilde folgende Stammfunktionen: 
+	\flushleft 
+	$f_1(x)=\frac{1}{x}$
+	
+	\bigskip
+	$f_2(x)=\frac{5}{x}$
+	
+	\bigskip
+	$f_3(x)=\frac{1}{x^3}$\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tikzpicture}[scale=1.7]
+		\draw (0,-0.1) -- (0,2.8);
+		\draw (-2,2.6) -- (2.5,2.6) ;
+		\draw (-1,3) node[below]{$f(x)$}  (1,3) node[below]{$F(x)$} ;	
+		\draw (-0.2,2.5) node[below left]{$\frac{1}{x}$} (0.2,2.5) node[below right]{$ln|x|+c$} ;
+		\draw (-0.2,2) node[below left]{$5\cdot\frac{1}{x}$} (0.2,2) node[below right]{$5\cdot ln|x|+c$} ;
+		\draw (-0.2,1.5) node[below left]{$x^{-3}$} (0.2,1.5) node[below right]{$-0,5x^{-2}+c$};
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Bilde folgende Stammfunktionen: 
+	\flushleft 
+	$f_1(x)=\frac{6x^2-4}{2x^3-4x}$
+	
+	\bigskip
+	$f_2(x)=\sqrt{x}$
+	
+	\bigskip
+	$f_3(x)=\frac{2x^3-4x^2+4x}{2x^2}$\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X | >{\raggedright\arraybackslash}X}
+		\multicolumn{1}{c|}{$f(x)$} & \multicolumn{1}{c}{$F(x)$} \\
+		\hline
+		$f_1(x) = \frac{6x^2-4}{2x^3-4x}$ & $F_1(x) = \ln|2x^3-4x| + c$ \\[3ex]
+		
+		$f_2(x) = x^{0,5}$ & $F_2(x) = \frac{1}{1,5}x^{1,5} + c$ \\[3ex]
+		
+		$\begin{aligned}[t]
+			f_3(x) &= \frac{2x^3-4x^2+4x}{2x^2} \\
+			&= x-2+\frac{2}{x}
+		\end{aligned}$ & $F_3(x) = 0,5x^2-2x$ \newline $+2\ln|x| + c$ \\
+	\end{tabularx}
+\end{center}\end{antwort}
+\begin{frage}Bilde folgende Stammfunktionen: 
+	\flushleft 
+	$f_1(x)=\frac{2x-4}{2x^2-8x}$
+	
+	\bigskip
+	$f_2(x)=\sqrt{7x-1}$
+	
+	\bigskip
+	$f_3(x)=sin(4x+2)$\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X | >{\raggedright\arraybackslash}X}
+		\multicolumn{1}{c|}{$f(x)$} & \multicolumn{1}{c}{$F(x)$} \\
+		\hline
+		$\begin{aligned}[t]
+		f_1(x)&=\frac{2x-4}{2x^2-8x} \\
+		&=\frac{1}{2}\cdot\frac{4x-8}{2x^2-8x}
+		\end{aligned}$ & $F_1(x)=\frac{1}{2}\cdot \ln|2x^2-8x|+c$ \\[4ex]
+		
+		$\begin{aligned}[t]
+			f_2(x) &= \sqrt{7x-1} \\
+			&= (\mathbf{7}x-1)^{0,5}
+		\end{aligned}$ & $\begin{aligned}[t] F_2(x)&=\frac{1}{1,5}(\mathbf{7}x-1)^{1,5}\\
+		&\quad\cdot\frac{1}{\mathbf{7}}+c \end{aligned}$ \\[4ex]
+		
+		$f_3(x)=\sin(\mathbf{4}x+2)$ & $\begin{aligned}[t]F_3(x)&=-\cos(\mathbf{4}x+2)\\&\quad\cdot\frac{1}{\mathbf{4}}+c\end{aligned}$ \\
+	\end{tabularx}
+\end{center}\end{antwort}
+\begin{frage}Stammfunktion von Brüchen
+	
+	(2 Fälle!)\end{frage}
+\begin{antwort}\normalsize\begin{itemize}
+	\item Im Zähler steht die Ableitung vom Nenner:
+	
+	$\displaystyle\int \! \frac{g'(x)}{\textbf{g(x)}} \, \mathrm{d}x=ln|\textbf{g(x)}|+c$
+	
+	z.B.: $\displaystyle\int \! \frac{4x-6}{{2x^2-6x}} \, \mathrm{d}x=ln|{2x^2-6x}|+c$
+	\item Es gibt nur einen Ausdruck mit '$n \cdot x^m$' im Nenner:
+	
+	 z.B.: $\displaystyle\int \! \frac{4x^3+x-2}{{x^2}} \, \mathrm{d}x$
+	 
+	 \begin{align*}
+	 &=\displaystyle\int \! (\frac{4x^3}{{x^2}}+\frac{x}{{x^2}}-\frac{2}{{x^2}}) \, \mathrm{d}x \\
+	 &=\displaystyle\int \! (4x+\frac{1}{{x}}-\frac{2}{{x^2}}) \, \mathrm{d}x \\
+	 &=\displaystyle 2x^2+ln|x|+2x^{-1}+c
+	 \end{align*}
+	\end{itemize}\end{antwort}
+\begin{frage}Formel Volumen eines Körpers der entsteht, wenn f(x) um die x-Achse rotiert mit den Grenzen a und b\end{frage}
+\begin{antwort}\begin{center}
+		\huge
+		$V = \pi \cdot \int_a^b \left( f(x) \right)^2 dx$
+	\end{center}\end{antwort}
+\begin{frage}Pfadregel bei Baumdiagrammen (Bsp.: 3-maliger Münzwurf)
+	
+\bigskip		
+\begin{center}
+\begin{tikzpicture}[
+	thick,
+	level 1/.style={sibling distance=3.2cm, level distance=1.3cm},
+	level 2/.style={sibling distance=1.6cm, level distance=1.3cm},
+	level 3/.style={sibling distance=0.8cm, level distance=1.3cm},
+	every node/.style={transform shape, scale=0.55},
+	yshift=1.8cm
+	]
+	% Startpunkt oben zentriert
+	\coordinate (Start) at (0,0);
+	
+	% Stufe 3 (Endpunkte gleichmäßig verteilt von -2.8 bis +2.8 mit Schrittweite 0.8)
+	\node[circle, draw, inner sep=2.5pt] (KKK3) at (-2.8, -3.9) {K};
+	\node[circle, draw, inner sep=2.5pt] (KKZ3) at (-2.0, -3.9) {Z};
+	\node[circle, draw, inner sep=2.5pt] (KZK3) at (-1.2, -3.9) {K};
+	\node[circle, draw, inner sep=2.5pt] (KZZ3) at (-0.4, -3.9) {Z};
+	\node[circle, draw, inner sep=2.5pt] (ZKK3) at (0.4, -3.9) {K};
+	\node[circle, draw, inner sep=2.5pt] (ZKZ3) at (1.2, -3.9) {Z};
+	\node[circle, draw, inner sep=2.5pt] (ZZK3) at (2.0, -3.9) {K};
+	\node[circle, draw, inner sep=2.5pt] (ZZZ3) at (2.8, -3.9) {Z};
+	
+	% Stufe 2 (Exakt mittig über den jeweiligen Paaren der Stufe 3)
+	\node[circle, draw, inner sep=2.5pt] (KK2) at (-2.4, -2.6) {K};
+	\node[circle, draw, inner sep=2.5pt] (KZ2) at (-0.8, -2.6) {Z};
+	\node[circle, draw, inner sep=2.5pt] (ZK2) at (0.8, -2.6) {K};
+	\node[circle, draw, inner sep=2.5pt] (ZZ2) at (2.4, -2.6) {Z};
+	
+	% Stufe 1 (Exakt mittig über den jeweiligen Paaren der Stufe 2)
+	\node[circle, draw, inner sep=2.5pt] (K1) at (-1.6, -1.3) {K};
+	\node[circle, draw, inner sep=2.5pt] (Z1) at (1.6, -1.3) {Z};
+	
+	% Verbindungen Stufe 1
+	\draw (Start) -- (K1);
+	\draw (Start) -- (Z1);
+	
+	% Verbindungen Stufe 2
+	\draw (K1) -- (KK2);
+	\draw (K1) -- (KZ2);
+	\draw (Z1) -- (ZK2);
+	\draw (Z1) -- (ZZ2);
+	
+	% Verbindungen Stufe 3
+	\draw (KK2) -- (KKK3);
+	\draw (KK2) -- (KKZ3);
+	\draw (KZ2) -- (KZK3);
+	\draw (KZ2) -- (KZZ3);
+	\draw (ZK2) -- (ZKK3);
+	\draw (ZK2) -- (ZKZ3);
+	\draw (ZZ2) -- (ZZK3);
+	\draw (ZZ2) -- (ZZZ3);
+\end{tikzpicture}
+\end{center}\end{frage}
+\begin{antwort}\normalsize\begin{itemize}
+		\item Entlang eines Astes multiplizieren, um eine ganz bestimmte Wahrscheinlichkeit auszurechnen.
+				
+		z.B.: Kopf, Kopf, Zahl: P(K;K;Z)
+		\item Zwischen den Ästen addieren, um die Wahrscheinlichkeit eines Ereignisses mit mehreren Versuchsausgängen zu berechnen:
+		
+		z.B.: Zweimal Kopf, einmal Zahl: P(K;K;Z)+P(K;Z;K)+P(Z;K;K)
+	\end{itemize}\end{antwort}
+\begin{frage}Baumdiagramm oder Vierfeldertafel\end{frage}
+\begin{antwort}\begin{itemize}
+		\item Baumdiagramm besser für:
+		
+		Bedingte Wahrscheinlichkeiten $P_B(A)$.
+		
+		\item Vierfeldertafel besser für:
+		
+		Absolute Häufigkeiten (z.B.: 96 Schüler), Schnitt-Wahrscheinlichkeiten $P(A\cap B)$
+	\end{itemize}\end{antwort}
+\begin{frage}Wahrscheinlichkeit, dass A oder B eintritt: 
+	
+	$P(A\bigcup B)$\end{frage}
+\begin{antwort}Satz von Sylvester:
+	
+	$P(A\bigcup B)=P(A)+P(B)- P(A\cap B)$
+	\bigskip
+	
+\begin{center}
+\begin{tikzpicture}[scale=1.1, thick, every node/.style={transform shape, scale=0.65}]
+	% TikZ-Bibliothek für Muster laden
+	\usetikzlibrary{patterns}
+	
+	% Definition der Kreise (Venn-Diagramm)
+	\def\circleA{(-0.8,0) circle (1.4)}
+	\def\circleB{(0.8,0) circle (1.4)}
+	
+	% Liniertes Muster für Kreis A (schräg nach links)
+	\begin{scope}
+		\pattern[pattern=north west lines, pattern color=gray!70] \circleA;
+	\end{scope}
+	
+	% Liniertes Muster für Kreis B (schräg nach rechts)
+	\begin{scope}
+		\pattern[pattern=north east lines, pattern color=gray!70] \circleB;
+	\end{scope}
+	
+	% Zeichnen der Kreislinien
+	\draw \circleA;
+	\draw \circleB;
+	
+	% Beschriftungen A und B direkt in die jeweiligen Mengen gesetzt
+	\node at (-1.4,0.5) {$A$};
+	\node at (1.4,0.5) {$B$};
+	
+	% Beschriftung der Schnittmenge in der Mitte ohne Hintergrundfüllung
+	\node at (0,0) {$A \cap B$};
+\end{tikzpicture}
+\end{center}\end{antwort}
+\begin{frage}Wahrscheinlichkeit, dass entweder A oder B eintritt:\end{frage}
+\begin{antwort}$P(\text{entweder A oder B}) =$ \\
+	$P(A)+P(B)- 2 \cdot P(A\cap B)$
+	\bigskip
+	
+	\begin{center}
+	\begin{tikzpicture}[scale=1.1, thick, every node/.style={transform shape, scale=0.65}]
+		% Definition der Kreise (Venn-Diagramm)
+		\def\circleA{(-0.8,0) circle (1.4)}
+		\def\circleB{(0.8,0) circle (1.4)}
+		
+		% Liniertes Muster für Kreis A (schräg nach links)
+		\begin{scope}
+			\draw[pattern=north west lines, pattern color=gray!70] \circleA;
+		\end{scope}
+		
+		% Liniertes Muster für Kreis B (schräg nach rechts)
+		\begin{scope}
+			\draw[pattern=north east lines, pattern color=gray!70] \circleB;
+		\end{scope}
+		
+		% Zeichnen der Kreislinien
+		\draw \circleA;
+		\draw \circleB;
+		
+		% Beschriftungen A und B direkt in die jeweiligen Mengen gesetzt
+		\node at (-1.4,0.5) {$A$};
+		\node at (1.4,0.5) {$B$};
+		
+		% Beschriftung der Schnittmenge in der Mitte ohne Hintergrundfüllung
+		\node at (0,0) {$A \cap B$};
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Stochastische Unabhängigkeit\end{frage}
+\begin{antwort}\begin{align*}
+	P(A\cap B) &= P(A)\cdot P(B) \Rightarrow \text{Unabhängig}\\
+	P(A\cap B) &\neq P(A)\cdot P(B) \Rightarrow \text{Abhängig}
+	\end{align*}\end{antwort}
+\begin{frage}Bedingte Wahrscheinlichkeit\end{frage}
+\begin{antwort}\LARGE
+	$P_B(A)=\frac{P(A \text{ }\cap \text{ }B)}{P(B)}$
+	\large
+	\begin{itemize}
+		\item Man ließt $P_B(A)$: Die Wahrscheinlichkeit, dass A eintritt unter der Bedingung, dass B bereits eingetreten ist.
+		\item Die Bedingung steht immer im Nenner
+		\item Die Wahrscheinlichkeiten können dem Baumdiagramm bzw. der Vierfeldertafel
+		entnommen werden.
+	\end{itemize}\end{antwort}
+\begin{frage}Bernoulli-Formel\end{frage}
+\begin{antwort}\LARGE
+	$P(X=k)=\binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}$
+	\large
+	\begin{itemize}
+		\item n = Anzahl Versuche
+		\item k = Anzahl Treffer
+		\item p = Trefferwahrscheinlichkeit
+	\end{itemize}\end{antwort}
+\begin{frage}Woran erkennt man ein Bernoulli-Experiment?\end{frage}
+\begin{antwort}\begin{itemize}
+		\item Es gibt nur Treffer und Nieten, nichts dazwischen.
+		\item Die Wahrscheinlichkeit für einen Treffer bzw. Niete bleibt immer gleich.
+	\end{itemize}
+	
+	z.B.: 10 Schuss auf eine Klappscheibe mit Trefferquote 60 $\%$.\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	genau 17 mal?\end{frage}
+\begin{antwort}n=100, k=17, p=0,6
+	
+	\bigskip
+	\begin{align*}
+	&P^{100}_{0,6}(X=17)= 
+	\\&\binom{100}{17} \cdot 0,6^{17}
+	\cdot (1-0,6)^{83}
+	\end{align*}\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	höchstens 20 mal?\end{frage}
+\begin{antwort}n=100, k$\leq$20, p=0,6
+	
+	\bigskip
+	$P^{100}_{0,6}(X\leq 20)$
+	
+	(Taschenrechner!)\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	weniger als 20 mal?\end{frage}
+\begin{antwort}n=100, k<20, p=0,6
+	
+	\bigskip
+	$P^{100}_{0,6}(X<20)=P^{100}_{0,6}(X\leq19)$
+	
+	(Tafelwerk!)\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	mindestens 20 mal?\end{frage}
+\begin{antwort}n=100, k$\geq$20, p=0,6
+	
+	\bigskip
+	$P^{100}_{0,6}(X\geq 20)=1-P^{100}_{0,6}(X\leq 19)$
+	
+	 (Taschenrechner!)\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	mehr als 20 mal?\end{frage}
+\begin{antwort}n=100, k>20, p=0,6
+	
+	\bigskip
+	$P^{100}_{0,6}(X>20)$ 
+	
+	$=1-P^{100}_{0,6}(X\leq 20)$
+	
+	Je nach Taschenrechner ist die Umrechnung nötig oder nicht.
+	
+	(Taschenrechner!)\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 100 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	mindestens 20 mal aber höchstens 30 mal?\end{frage}
+\begin{antwort}n=100, 20$\leq$k$\leq$30, p=0,6
+	
+	\bigskip\large
+	$P^{100}_{0,6}(20\leq X \leq30) =$
+	
+	$P^{100}_{0,6}(X\leq30)-P^{100}_{0,6}(X\leq19)$
+	
+	Je nach Taschenrechner ist die Umrechnung nötig oder nicht.
+
+	(Taschenrechner!)\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6. Mit welcher Wahrscheinlichkeit ist 
+	
+	\LARGE 
+	der 20. Versuch der 6. Treffer?\end{frage}
+\begin{antwort}5 Treffer in den ersten 19 Versuchen und (=mal) ein Treffer beim 20. Versuch:
+	
+	n=19, k=5, p=0,6 und (=mal) n=1, k=1, p=0,6
+	
+	\bigskip
+	\begin{align*}
+	&\binom{19}{5} \cdot 0,6^{5} \cdot (1-0,6)^{14} \\
+	\cdot &\binom{1}{1} \cdot 0,6^{1} \cdot (1-0,6)^{0}
+	\end{align*}\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 20 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er  
+	
+	\LARGE 
+	6 mal, jedoch nicht in den ersten 10 Versuchen?\end{frage}
+\begin{antwort}0 Treffer in den ersten 10 Versuchen und (=mal) 6 Treffer in den letzten 10 Versuchen:
+	
+	n=10, k=0, p=0,6 und (=mal) n=10, k=6, p=0,6
+	
+	\bigskip
+	\begin{align*}
+	&\binom{10}{0} \cdot 0,6^{0} \cdot (1-0,6)^{10} \\
+	\cdot &\binom{10}{6} \cdot 0,6^{6} \cdot (1-0,6)^{4}
+	\end{align*}\end{antwort}
+\begin{frage}\large
+	Ein Schütze trifft sein Ziel mit p=0,6 und gibt 20 Schuss ab. Mit welcher Wahrscheinlichkeit trifft er 
+	
+	\LARGE 
+	genau 3 mal aber aufeinanderfolgend?\end{frage}
+\begin{antwort}n=20, k=3, p=0,6
+	
+	\bigskip
+	\begin{align*}
+	P(\text{k auf.})&=(n-k+1)\cdot p^{k}\\
+	&\quad\cdot (1-p)^{n-k} \\
+	P(\text{3 auf.})&=18\cdot 0,6^{3} \cdot (1-0,6)^{17}
+	\end{align*}\end{antwort}
+\begin{frage}Die 3-mindestens-Aufgabe\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Erkennt man an den 3 \glqq Mindestens\grqq~im Text. 
+		\item Verwende folgende Formel:
+		
+		 $1-(1-p_{Treffer})^n\geq \alpha$
+		\item Löse mittels $ln$ nach  n auf.
+		\item Ergebnis immer aufrunden.
+	\end{enumerate}\end{antwort}
+\begin{frage}Ziehen ohne Zurücklegen\end{frage}
+\begin{antwort}\Large
+	\[
+	 p=\frac{\binom{\text{Sorte 1}}{\text{Zieh 1}} \cdot \binom{\text{Sorte 2}}{\text{Zieh 2}}}{\binom{\text{Gesamt}}{\text{Zieh ges.}}}
+	 \]\end{antwort}
+\begin{frage}Zwei Arten der Wahrscheinlichkeitsverteilung mit Beispiel\end{frage}
+\begin{antwort}\begin{itemize}
+		\item Diskrete Wahrscheinlichkeitsverteilung
+	\end{itemize}
+	Z.B. Bernoulli
+	\begin{itemize}
+		\item Stetige Wahrscheinlichkeitsverteilung
+	\end{itemize}
+	Z.B. Normalverteilung\end{antwort}
+\begin{frage}Formel der Normalverteilung\end{frage}
+\begin{antwort}\begin{center}
+		\Large
+		$\varphi_{\mu,\std}(x)=\frac{1}{\std\sqrt{2\pi}}\cdot e^{-\frac{(x-\mu)^2}{2\std^2}}$
+		\vspace{1cm}
+		
+		\normalsize
+		$\mu$: Erwartungswert; $\std$: Standardabweichung
+	\end{center}\end{antwort}
+\begin{frage}Erwartungswert\end{frage}
+\begin{antwort}\begin{itemize}
+		\item Diskrete Verteilung
+	\end{itemize}
+	$E(X)=\mu=x_1 \cdot p_1 + x_2 \cdot p_2 + ...$,\\
+	Ausnahme Bernoulli: $\mu=n \cdot p$
+	\begin{itemize}
+		\item Stetige Verteilung
+	\end{itemize}
+	$A=\displaystyle\int\limits_{-\infty}^{\infty} \!x\cdot f(x) \, \mathrm{d}x$
+	
+	Durchschnittlicher Ausgang eines Zufallsexperiments.
+	z.B. Gewinn pro Spiel\end{antwort}
+\begin{frage}Varianz\end{frage}
+\begin{antwort}\begin{itemize}
+		\item $Var(X)=(x_1-\mu)^2 \cdot p_1+(x_2-\mu)^2 \cdot p_2+...$	
+		\item Ausnahme Bernoulli: $Var(X)=n \cdot p \cdot (1-p)$	
+	\end{itemize}\end{antwort}
+\begin{frage}Standardabweichung\end{frage}
+\begin{antwort}\begin{itemize}
+		\item Gibt die durchschnittliche Abweichung vom Erwartungswert an.		
+		\item $\sigma=\sqrt{Var(X)}$	
+	\end{itemize}\end{antwort}
+\begin{frage}Schema für Hypothesentest Typ I\\
+	$\alpha \text{ bzw. }\beta$-Fehler ist gesucht\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Zahlenstrahl und $H_0$ angeben
+		
+		=> Annahme- und Ablehnungsbereich  ($A \text{ bzw. }\overline{A}$)	
+		\item Ist  $\alpha \text{ oder }\beta$-Fehler gesucht? Umformulieren in Wirklichkeit und Test
+		\item In Lückenformel einsetzen: 
+		
+		$\alpha \text{ bzw. }\beta=P^n_p(A\text{ bzw. }\overline{A})$	
+	\end{enumerate}\end{antwort}
+\begin{frage}Schema für Hypothesentest Typ II\\
+	Annahme bzw. Ablehnungsbereich ist gesucht\end{frage}
+\begin{antwort}\begin{enumerate}
+		\item Zahlenstrahl und $H_0$ angeben
+		
+		=> Annahme- und Ablehnungsbereich mit k bzw. k+1 ($A \text{ bzw. }\overline{A}$)	
+		\item Ist  $\alpha \text{ oder }\beta$-Fehler gesucht? Umformulieren in Wirklichkeit und Test
+		\item $\alpha \text{ bzw. }\beta=P^n_p(A\text{ bzw. }\overline{A})$ verschiedene Werte für k im TR einsetzen und so k bestimmen
+	\end{enumerate}\end{antwort}
+\begin{frage}Signifikanzniveau\end{frage}
+\begin{antwort}\large
+	\begin{itemize}
+		\item Die Nullhypothese $H_0$ ist wahr (Wirklichkeit), \\
+		 wird jedoch vom Test als falsch angenommen.
+		\item Andere Bezeichnungen: Fehler 1. Art oder $\alpha$-Fehler.	
+	\end{itemize}
+	\begin{center}
+		\normalsize
+		\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+			\hline
+			\diagbox{Test}{Wirkl.} & $H_0$ & $H_1$ \\ \hline
+			$H_0$ behalten & Richtig & $\beta$-Fehler \\ \hline
+			$H_0$ ablehnen & $\alpha$-Fehler & Richtig \\ \hline
+		\end{tabularx}
+	\end{center}\end{antwort}
+\begin{frage}Fehler 2. Art\end{frage}
+\begin{antwort}\large
+	\begin{itemize}
+		\item Die Nullhypothese $H_0$ ist falsch (Wirklichkeit), wird jedoch vom Test als wahr angenommen.
+		\item Andere Bezeichnung: $\beta$-Fehler.	
+	\end{itemize}
+	\begin{center}
+	\normalsize
+		\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}
+			\hline
+			\diagbox{Test}{Wirkl.} & $H_0$ & $H_1$ \\ \hline
+			$H_0$ behalten & Richtig & $\beta$-Fehler \\ \hline
+			$H_0$ ablehnen & $\alpha$-Fehler & Richtig \\ \hline
+		\end{tabularx}
+	\end{center}\end{antwort}
+\begin{frage}Die Nullhypothese wird immer so aufgestellt, dass ...\end{frage}
+\begin{antwort}sie das Gegenteil des Ziels ist. Möchte man z.B. zeigen, dass p mehr als 40 $\%$ ist,
+	so muss $H_0: p \le 40$ $\%$ sein.
+	
+	Ausnahme: Im Text steht, dass es sich hierbei um die Nullhypothese handelt.\end{antwort}
+\begin{frage}\LARGE
+	In einer Kiste sind 10 rote, 4 gelbe und 6 grüne Äpfel. Man entnimmt 6 Äpfel. Wie viele Möglichkeiten gibt es, 3 rote, 2 gelbe und 1 grünen Apfel zu ziehen?\end{frage}
+\begin{antwort}\LARGE
+	$\binom{10}{3} \cdot \binom{4}{2} \cdot \binom{6}{1}$\end{antwort}
+\begin{frage}\LARGE
+	Wie viele Möglichkeiten gibt es, 5 Personen 
+	
+	a) in ein Auto mit 5 Sitzplätzen zu setzen?
+	
+	b) in einen Kleinbus mit 7 Sitzplätzen zu setzen?\end{frage}
+\begin{antwort}\LARGE
+	a) $5 \cdot 4 \cdot 3\cdot 2 \cdot 1=5!$
+	
+	\vspace{0.5cm}
+	b) $7 \cdot 6 \cdot 5\cdot 4 \cdot 3$\end{antwort}
+\begin{frage}\LARGE
+	Wie viele Möglichkeiten gibt es, 5 Personen aus einer Gruppe von 12 Personen auszuwählen, wenn
+	es auf die Reihenfolge ankommt?\end{frage}
+\begin{antwort}\LARGE
+	$\binom{12}{5} \cdot 5!$\end{antwort}
+\begin{frage}Vektor von $A(1|2|-3)$ nach $B(3|-5|1)$ aufstellen\end{frage}
+\begin{antwort}Spitze minus Fuß:
+	
+	\bigskip		
+	\begin{align*}
+		\vec{AB}&=\vec{B}-\vec{A} \\
+		&=\left(\begin{array}{c} 3-1 \\ -5-2 \\ 1+3\end{array} \right)=\left(\begin{array}{c} 2 \\ -7 \\ 4\end{array} \right)
+	\end{align*}\end{antwort}
+\begin{frage}Länge eines Vektors
+	
+	Bsp.: $\vec{a}=\left(\begin{array}{c} 2 \\ 1 \\ -2\end{array} \right)$\end{frage}
+\begin{antwort}Formel: $\left|\vec{a}\right|=\sqrt{a_1^2 + a_2^2 + a_3^2}$
+	
+	\bigskip		
+	\begin{align*}
+	\left|\vec{a}\right|&=\sqrt{2^2 + 1^2 + (-2)^2} \\
+	&=3
+	\end{align*}\end{antwort}
+\begin{frage}\LARGE
+	Prüfe, ob $\vec{a}=\left(\begin{array}{c} 3 \\ 2 \\ -4\end{array} \right)$ und  $\vec{b}=\left(\begin{array}{c} 4 \\ 0 \\ 3\end{array} \right)$ 
+	senkrecht aufeinander stehen.\end{frage}
+\begin{antwort}\begin{align*}
+	\vec{a} \circ \vec{b} &= 3 \cdot 4 + 2 \cdot 0 -4\cdot 3 \\
+	&= 0
+	\end{align*}
+	
+	$\Rightarrow \vec{a} \perp \vec{b}$\end{antwort}
+\begin{frage}\LARGE
+	Prüfe, ob $\vec{a}$ und  $\vec{b}$ 
+	parallel zueinander sind.\end{frage}
+\begin{antwort}Mann muss prüfen, ob $\vec{a}$ und  $\vec{b}$ Vielfache sind!
+	\begin{enumerate}
+		\item Schreibe $k \cdot \vec{a}= \vec{b}$
+		\item Rechne in allen drei Zeilen k aus.			
+		\item Wenn in allen drei Zeilen das gleiche k rauskommt, sind $\vec{a}$ und $\vec{b}$ parallel, bzw. linear abhängig.	
+	\end{enumerate}\end{antwort}
+\begin{frage}Berechne  $\left(\begin{array}{c} 2 \\ 3 \\ 4\end{array} \right) \times \left(\begin{array}{c} -5 \\ 0 \\ 1\end{array} \right)$\end{frage}
+\begin{antwort}\begin{align*}
+	&\left(\begin{array}{c} 2 \\ 3 \\ 4\end{array} \right) \times \left(\begin{array}{c} -5 \\ 0 \\ 1\end{array} \right) \\
+	&= \left(\begin{array}{c} 3 \cdot 1 - 4 \cdot 0 \\ 4 \cdot (-5) - 2 \cdot 1 \\ 2 \cdot 0 - 3 \cdot (-5)\end{array} \right)\\
+	&=\left(\begin{array}{c} 3 \\ -22 \\ 15\end{array} \right)
+	\end{align*}
+	
+	Hilfsschema (die ersten zwei Zeilen unten nochmals anfügen):
+	\begin{center}
+	\begin{tabular}{cc}
+	2 & -5 \\
+	3 & 0
+	\end{tabular}
+	\end{center}\end{antwort}
+\begin{frage}Welche geometrische Bedeutung hat das Ergebnis von $\vec{a}\times\vec{b}\textbf{ }$?\end{frage}
+\begin{antwort}\large	
+	\begin{enumerate}
+		\item Der Ergebnisvektor steht sowohl auf $\vec{a}$ als auch auf $\vec{b}$ senkrecht.
+		
+		\begin{center}
+			\begin{tikzpicture}[scale=1.4, >=latex, thick, every node/.style={transform shape, scale=0.85}]
+				% Aufgespannte Ebene (Parallelogramm) im Hintergrund füllen
+				\fill[gray!10] (0,0) -- (2,0.4) -- (2.8,1.6) -- (0.8,1.2) -- cycle;
+				
+				% Gestrichelte Begrenzungslinien des Parallelogramms
+				\draw[dashed, gray!80] (2,0.4) -- (2.8,1.6);
+				\draw[dashed, gray!80] (0.8,1.2) -- (2.8,1.6);
+				
+				% Beschriftung der grauen Fläche
+				\node[gray!80!black] at (1.4,0.8) {\footnotesize $A_{\text{Parallelogramm}}$};
+				
+				% Vektor a
+				\draw[->, blue, very thick] (0,0) -- (2,0.4) node[midway, below right] {\footnotesize $\vec{a}$};
+				
+				% Vektor b
+				\draw[->, green!50!black, very thick] (0,0) -- (0.8,1.2) node[left=2pt] {\footnotesize $\vec{b}$};
+				
+				% Vektor a x b
+				\draw[->, red, very thick] (0,0) -- (0,1.6) node[above] {\footnotesize $\vec{a} \times \vec{b}$};
+			\end{tikzpicture}
+		\end{center}
+		\item Die Länge des Ergebnisvektors, also sein Betrag, entspricht der Fläche des aufgespannten Parallelogramms.
+		
+		$A_{\text{Parallelogramm}}=|\vec{a} \times \vec{b}|$	
+			
+		$A_{\text{Dreieck}}=0,5 \cdot |\vec{a} \times \vec{b}|$			
+	\end{enumerate}\end{antwort}
+\begin{frage}Der Winkel zwischen zwei Vektoren\end{frage}
+\begin{antwort}\LARGE
+	$cos(\alpha)=\frac{\vec{a} \circ \vec{b}}{|\vec{a}|\cdot|\vec{b}|}$\end{antwort}
+\begin{frage}Stelle eine Vektorkette auf, so dass D berechnet werden kann, wenn die anderen Punkte gegeben sind.
+	
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex, thick, every node/.style={transform shape, scale=0.85}]
+	% Koordinatenachsen beschriftet mit x_1 und x_2
+	\draw[->] (-0.5,0) -- (4.5,0) node[right] {\footnotesize $x_1$};
+	\draw[->] (0,-0.5) -- (0,2.5) node[above] {\footnotesize $x_2$};
+	\node[below left] at (0,0) {\footnotesize $O$};
+	
+	% Gedrehtes Parallelogramm ABCD durch rotierte Koordinaten
+	\begin{scope}[shift={(1.0,0.5)}, rotate=15]
+		\coordinate (A) at (0,0);
+		\coordinate (B) at (2.2,0);
+		\coordinate (C) at (3.0,1.5);
+		\coordinate (D) at (0.8,1.5);
+		
+		\draw[black, very thick] (A) -- (B) -- (C) -- (D) -- cycle;
+		
+		% Beschriftungen der Eckpunkte
+		\node[left, black] at (A) {\footnotesize $A$};
+		\node[below right, black] at (B) {\footnotesize $B$};
+		\node[above right, black] at (C) {\footnotesize $C$};
+		\node[above left, black] at (D) {\footnotesize $D$};
+	\end{scope}
+\end{tikzpicture}
+\end{center}\end{frage}
+\begin{antwort}\LARGE
+	$\vec{D}=\vec{A}+\vec{BC}$
+	\bigskip
+	\Large
+	
+	Dieser Zusammenhang gilt auch für:
+	\begin{itemize}
+		\item Quadrat
+		\item Rechteck
+		\item Raute		
+	\end{itemize}\end{antwort}
+\begin{frage}Volumen einer Pyramide mit $S$ als Spitze und $ABC$ als Grundfläche\end{frage}
+\begin{antwort}\begin{center}
+	\begin{tikzpicture}[scale=1.2, >=latex, thick, every node/.style={transform shape, scale=0.85}]
+		% Eckpunkte der Grundfläche definieren
+		\coordinate (A) at (0,0);
+		\coordinate (B) at (3,-0.5);
+		\coordinate (C) at (1.8,1.2);
+		
+		% Schwerpunkt G der Grundfläche berechnen
+		\coordinate (G) at (1.6,0.233);
+		
+		% Spitze S senkrecht über dem Schwerpunkt G
+		\coordinate (S) at (1.6,3.2);
+		
+		% Verdeckte Kanten im Hintergrund (gestrichelt)
+		\draw[dashed, gray!80] (A) -- (C);
+		\draw[dashed, gray!80] (B) -- (C);
+		\draw[dashed, gray!80] (C) -- (S);
+		
+		% Höhe h vom Schwerpunkt G zur Spitze S (gestrichelt und rot)
+		\draw[dashed, red, very thick] (G) -- (S) node[midway, left] {\footnotesize $h$};
+		
+		% Sichtbare Kanten der Pyramide
+		\draw[black, very thick] (A) -- (B);
+		\draw[black, very thick] (A) -- (S);
+		\draw[black, very thick] (B) -- (S);
+		
+		% Schwerpunkt G einzeichnen
+		\fill[red] (G) circle (1.5pt) node[right, black] {\footnotesize $G$};
+		
+		% Beschriftung der Eckpunkte
+		\node[below left] at (A) {\footnotesize $A$};
+		\node[below right] at (B) {\footnotesize $B$};
+		\node[right, gray!80!black] at (C) {\footnotesize $C$};
+		\node[above] at (S) {\footnotesize $S$};
+	\end{tikzpicture}
+	\end{center}
+
+	\LARGE
+	$V_{\text{Pyramide}}=\frac{1}{3}\cdot G\cdot h$\end{antwort}
+\begin{frage}Prüfe, ob die Punkte $A, B, C$ ein rechtwinkliges Dreieck bilden.\end{frage}
+\begin{antwort}Prüfe mittels Skalarprodukt, ob EINE der Bedingungen erfüllt ist:
+	\begin{itemize}
+		\item $\vec{AB} \mal \vec{AC}=0 \rightarrow$ rechter Winkel bei A 
+		\item $\vec{AB} \mal \vec{BC}=0 \rightarrow$ rechter Winkel bei B 
+		\item $\vec{AC} \mal \vec{BC}=0 \rightarrow$ rechter Winkel bei C
+	\end{itemize}\end{antwort}
+\begin{frage}Prüfe, ob die Punkte $A, B, C$ ein gleichschenkliges Dreieck bilden.\end{frage}
+\begin{antwort}\begin{itemize}		
+		\item Berechne $|\vec{AB}|$, $|\vec{AC}|$ und $|\vec{BC}|$ 
+		\item Prüfe, ob zwei Seiten gleich lang sind.
+	\end{itemize}\end{antwort}
+\begin{frage}Prüfe, ob die Punkte $A, B, C$ ein gleichseitiges Dreieck bilden.\end{frage}
+\begin{antwort}\begin{itemize}		
+		\item Berechne $|\vec{AB}|$, $|\vec{AC}|$ und $|\vec{BC}|$ 
+		\item Prüfe, ob alle drei Seiten gleich lang sind.
+	\end{itemize}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ ein Rechteck bilden.\end{frage}
+\begin{antwort}Die folgenden zwei Bedingungen müssen erfüllt sein:
+	\normalsize	\begin{itemize}
+		\item $\vec{AB}=\vec{DC}$
+		\item $\vec{AB}\mal\vec{AD}=0$
+	\end{itemize}
+	
+	\begin{center}
+	\begin{tikzpicture}[scale=2]
+	\draw (0,0) -- (2,0) -- (2,1) -- (0,1) -- cycle ;
+	\draw (0,0) node[below left]{$A$} (2,0) node[below right]{$B$} (2,1)node[above right]{$C$} (0,1) node[above left]{$D$} ;
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ ein Quadrat bilden.\end{frage}
+\begin{antwort}Die folgenden drei Bedingungen müssen erfüllt sein:
+	\normalsize	\begin{itemize}
+		\item $\left|\vec{AB}\right|=\left|\vec{BC}\right|=\left|\vec{CD}\right|=\left|\vec{DA}\right|$
+		\item $\vec{AB}=\vec{DC}$
+		\item $\vec{AB}\mal\vec{AD}=0$
+	\end{itemize}
+	
+	\begin{center}
+		\begin{tikzpicture}[scale=2]
+		\draw (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle ;
+		\draw (0,0) node[below left]{$A$} (1,0) node[below right]{$B$} (1,1)node[above right]{$C$} (0,1) node[above left]{$D$} ;
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ ein Parallelogramm bilden.\end{frage}
+\begin{antwort}Die folgende Bedingung muss erfüllt sein:
+	\normalsize
+	\begin{itemize}
+		\item $\vec{AB}=\vec{DC}$
+	\end{itemize}
+	
+	\begin{center}
+	\begin{tikzpicture}[scale=2]
+	\draw (0,0) -- (2,0) -- (2.5,1) -- (0.5,1) -- cycle ;
+	\draw (0,0) node[below left]{$A$} (2,0) node[below right]{$B$} (2.5,1)node[above right]{$C$} (0.5,1) node[above left]{$D$} ;
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ eine Raute bilden.\end{frage}
+\begin{antwort}\large
+	Die folgenden zwei Bedingungen müssen erfüllt sein:
+
+	\normalsize	\begin{itemize}
+		\item $\vec{AC}\mal\vec{BD}=0$
+		\item $\vec{AB}=\vec{DC}$
+	\end{itemize}
+	\begin{center}
+		\begin{tikzpicture}[scale=2]
+			\draw (0,0) -- (0.5,0.8) -- (0,1.6) -- (-0.5,0.8) -- cycle ;
+			\draw (0,0) node[below]{$A$} (0.5,0.8) node[right]{$B$} (0,1.6)node[above]{$C$} (-0.5,0.8) node[left]{$D$} ;
+		\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ ein Drachenviereck bilden.\end{frage}
+\begin{antwort}Die folgenden drei Bedingungen müssen erfüllt sein:
+	\normalsize	\begin{itemize}
+		\item $\vec{AC}\mal\vec{BD}=0$
+		\item $|\vec{AB}|=|\vec{AD}|$
+		\item $[\vec{AB} \times \vec{AC}]\circ\vec{AD}=0$	
+	\end{itemize}
+	\begin{center}
+		\begin{tikzpicture}[scale=2]
+		\draw (0,0) -- (0.5,0.8) -- (0,1.2) -- (-0.5,0.8) -- cycle ;
+		\draw (0,0) node[below]{$A$} (0.5,0.8) node[right]{$B$} (0,1.2)node[above]{$C$} (-0.5,0.8) node[left]{$D$} ;
+		\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Zeige, dass die Punkte $A, B, C$ und $D$ ein Trapez bilden.\end{frage}
+\begin{antwort}Zwei gegenüberliegende Seiten müssen parallel sein. Also:
+	Entweder muss $k \cdot \vec{AB}=\vec{DC}$ oder $k \cdot \vec{AD}=\vec{BC}$
+	erfüllt sein.
+	\bigskip
+	
+	\begin{center}
+	\begin{tikzpicture}[scale=2]
+	\draw (0,0) -- (2,0) -- (1.3,1) -- (0.4,1) -- cycle ;
+	\draw (0,0) node[below left]{$A$} (2,0) node[below right]{$B$} (1.3,1)node[above right]{$C$} (0.4,1) node[above left]{$D$} ;
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}\LARGE
+	Stelle die Geradengleichung durch die Punkte $A(1|2|3)$ und $B(6|2|2)$ auf.\end{frage}
+\begin{antwort}\begin{align*}
+	g:\vec{x}&=\left(\begin{array}{c} 1 \\ 2 \\ 3\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 5 \\ 0 \\ -1\end{array} \right) \\
+	&=\vec{A} + \lambda \cdot \vec{AB}
+	\end{align*}\end{antwort}
+\begin{frage}\LARGE
+	Gib die Geradengleichungen der Koordinatenachsen an.\end{frage}
+\begin{antwort}\large
+	$x_1$-Achse:
+	\[\vec{x}=\left(\begin{array}{c} 0 \\ 0 \\ 0\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 1 \\ 0 \\ 0\end{array} \right)\]
+	
+	$x_2$-Achse:
+	\[\vec{x}=\left(\begin{array}{c} 0 \\ 0 \\ 0\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 0 \\ 1 \\ 0\end{array} \right)\]
+	
+	$x_3$-Achse:
+	\[\vec{x}=\left(\begin{array}{c} 0 \\ 0 \\ 0\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 0 \\ 0 \\ 1\end{array} \right)\]\end{antwort}
+\begin{frage}\LARGE
+	Welche besondere Lage hat die folgende Gerade im Raum?
+	
+	$g:\vec{x}=\left(\begin{array}{c} 4 \\ 2 \\ -8\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 3 \\ 0 \\ 4\end{array} \right)$\end{frage}
+\begin{antwort}\Large
+	Die Gerade ist parallel zur $x_1x_3$-Ebene.
+	
+	Merke: Immer parallel zu den x-Koordinaten, die im Richtungsvektor nicht 0 sind.\end{antwort}
+\begin{frage}\LARGE
+	Liegt der Punkt P auf der Geraden g?\end{frage}
+\begin{antwort}\Large	
+	\begin{enumerate} 
+		\item Setze den Punkt in die Gerade für $\vec{x}$ ein.	
+		\item Schreibe in 3 Gleichungen (Gleichungssystem).
+		\item Berechne in jeder Gleichung $\lambda$.
+		\item Wenn alle $\lambda$ gleich sind, liegt P auf g.
+	\end{enumerate}\end{antwort}
+\begin{frage}\LARGE
+	Wann sind zwei Geraden parallel?
+	
+	Wann sind zwei Geraden echt parallel?\end{frage}
+\begin{antwort}\Large	
+	\begin{itemize} 
+		\item Zwei Geraden sind parallel, wenn die Richtungsvektoren Vielfache voneinander, also parallel, sind.	
+		(Sie könnten aber auch identisch sein)
+		\item Man muss noch prüfen, ob der Aufpunkt der einen Geraden auf der anderen Geraden liegt.
+		\item Wenn nicht, sind die Geraden echt parallel.
+	\end{itemize}\end{antwort}
+\begin{frage}\LARGE
+	Schnittpunkt zweier Geraden\end{frage}
+\begin{antwort}\Large	
+	\begin{enumerate} 
+		\item Die beiden Geraden gleichsetzen
+		\item Schreibe in 3 Gleichungen (Gleichungssystem)
+		\item $\lambda$ und $\mu$ (mit zwei Gleichungen) ausrechnen
+		\item  $\lambda$ oder $\mu$ in die zugehörige Geradengleichung einsetzen und zusammenfassen
+	\end{enumerate} 
+	\bigskip
+	=> Schnittpunkt\end{antwort}
+\begin{frage}\LARGE
+	Schnittwinkel zweier Geraden\end{frage}
+\begin{antwort}\Large	
+		Der Schnittwinkel zweier Geraden ergibt sich aus dem Winkel der beiden Richtungsvektoren $\vec{v_1}$ und $\vec{v_2}$ \\
+		=> $cos(\alpha)=\frac{|\vec{v_1} \circ \vec{v_2}|}{|\vec{v_1}|\cdot|\vec{v_2}|}$\end{antwort}
+\begin{frage}\LARGE
+	 Abstand eines Punktes P von einer 
+	 
+	 Geraden g\end{frage}
+\begin{antwort}\begin{enumerate} 
+		\item Allgemeinen Geradenpunkt $G$ aufstellen
+		\item $\vec{PG}$ bilden
+		\item $\vec{PG}$ muss senkrecht zum Richtungsvektor von g sein: $\vec{PG} \mal \vec{v_g}=0$ => man erhält $\lambda$
+		
+		\item $\lambda$ in  $\vec{PG}$ einsetzen
+		\item $|\vec{PG}|$ bestimmen
+		
+	\end{enumerate}\end{antwort}
+\begin{frage}\LARGE
+	Lage zweier Geraden $g$ und $h$\end{frage}
+\begin{antwort}\begin{center}
+	\includegraphics[width=\textwidth]{schema_gerade_gerade}
+	\end{center}\end{antwort}
+\begin{frage}\LARGE
+	Abstand zweier paralleler Geraden g und h\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item Funktioniert wie bei Abstand Punkt und Gerade
+		\item Den Aufpunkt der Geraden h verwenden		
+		\item Abstand vom Aufpunkt h zur Geraden g berechnen
+	\end{itemize}\end{antwort}
+\begin{frage}\LARGE
+	Ebene durch die Punkte $A(1|2|-3)$, $B(6|2|2)$ und $C(8|-2|1)$\end{frage}
+\begin{antwort}\begin{align*}
+	E:\vec{x}=&\left(\begin{array}{c} 1 \\ 2 \\ -3\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 5 \\ 0 \\ 5\end{array} \right) \\
+	&+\mu \cdot \left(\begin{array}{c} 7 \\-4 \\ 4\end{array} \right) \\
+	=&\vec{A} + \lambda\cdot\vec{AB} + \mu\cdot\vec{AC}
+	\end{align*}\end{antwort}
+\begin{frage}\LARGE
+	Ebene durch $P(2|2|-3)$ und $g$: 
+	
+	$g:\vec{x}=\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ 2 \\ 5\end{array} \right)$\end{frage}
+\begin{antwort}\begin{align*}
+	E:\vec{x}=&\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ 2 \\ 5\end{array} \right)\\
+	&+\mu \cdot \left(\begin{array}{c} 1 \\0 \\ -5\end{array} \right)
+	\end{align*}
+	\begin{center}
+	(Aufgebaut durch $g$ und $\vec{A_gP}$)
+	\end{center}\end{antwort}
+\begin{frage}\LARGE
+	Ebene durch zwei parallele Geraden
+	\large
+	\begin{align*}
+	g:\vec{x}&=\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right)\\
+	h:\vec{x}&=\left(\begin{array}{c} 0 \\ -4 \\ 3\end{array} \right)+\mu \cdot \left(\begin{array}{c} 2 \\ -1 \\ 1\end{array} \right)
+	\end{align*}\end{frage}
+\begin{antwort}\begin{align*}
+	E:\vec{x}=&\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right)\\
+	&+\mu \cdot \left(\begin{array}{c} -1 \\-6 \\ 1\end{array} \right)
+	\end{align*}
+	\begin{center}
+	(Aufgebaut durch $g$ und $\vec{A_gA_h}$)
+	\end{center}\end{antwort}
+\begin{frage}\LARGE
+	Ebene durch sich schneidende Geraden
+	\large
+	\begin{align*}
+	g:\vec{x}&=\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right)\\
+	h:\vec{x}&=\left(\begin{array}{c} 5 \\ 0 \\ 4\end{array} \right)+\mu \cdot \left(\begin{array}{c} 3 \\ 0 \\ -1\end{array} \right)
+	\end{align*}\end{frage}
+\begin{antwort}\begin{align*}
+	E:\vec{x}=&\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right)\\
+	&+\mu \cdot \left(\begin{array}{c} 3 \\0 \\ -1\end{array} \right)
+	\end{align*}
+	\begin{center}
+	(Aufgebaut durch $g$ und $\vec{v_h}$)
+	\end{center}\end{antwort}
+\begin{frage}\LARGE
+	Gleichung einer Kugel\end{frage}
+\begin{antwort}$K: (x_1-m_1)^2+(x_2-m_2)^2+(x_3-m_3)^2=r^2$
+	
+	\begin{itemize} 
+		\item $M(m_1|m_2|m_3)$ ist der Mittelpunkt der Kugel
+		\item r ist der Radius der Kugel	
+	\end{itemize}\end{antwort}
+\begin{frage}\LARGE
+	Liegt ein Punkt P innerhalb, außerhalb oder auf der Kugel?\end{frage}
+\begin{antwort}\begin{enumerate} 
+		\item Berechne $|MP|$
+		\item\normalsize 	\begin{itemize}
+				\item $|MP|=r \Rightarrow$ P liegt auf der Kugel
+				\item $|MP|<r \Rightarrow$ P liegt innerhalb der Kugel
+				\item $|MP|>r \Rightarrow$ P liegt außerhalb der Kugel
+				\end{itemize}	
+	\end{enumerate}\end{antwort}
+\begin{frage}\LARGE
+	Parameterform in Koordinatenform umformen
+	\bigskip
+	\normalsize
+	\begin{align*}
+		E:\vec{x}=&\left(\begin{array}{c} 1 \\ 2 \\ 2\end{array} \right)+\lambda \cdot \left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right)\\
+		&+\mu \cdot \left(\begin{array}{c} 3 \\0 \\ -1\end{array} \right)
+	\end{align*}\end{frage}
+\begin{antwort}\normalsize
+	\begin{enumerate} 
+		\item Kreuzprodukt der beiden Richtungsvektoren
+		
+		\begin{align*}
+		\vec{n}&=\left(\begin{array}{c} 4 \\ -2 \\ 2\end{array} \right) \times \left(\begin{array}{c} 3 \\0 \\ -1\end{array} \right) \\
+		&=\left(\begin{array}{c} 2 \\10 \\ 6\end{array} \right)
+		\end{align*}
+		
+		\item Normalenform hinschreiben: 
+		
+		$2 \cdot x_1 + 10 \cdot x_2+6 \cdot x_3 + c = 0$
+		
+		\item Aufpunkt A(1|2|2) einsetzen, um c zu erhalten: 
+		
+		$2 \cdot 1 + 10 \cdot 2+6 \cdot 2 + c = 0$
+		... $\Rightarrow c = -34$
+		
+		\item Fertige Koordinatenform angeben: 
+		
+		$E: 2 \cdot x_1 + 10 \cdot x_2+6 \cdot x_3  -34 = 0$
+			
+	\end{enumerate}\end{antwort}
+\begin{frage}\LARGE
+	Koordinatenform in Parameterform\end{frage}
+\begin{antwort}\normalsize
+	\begin{enumerate} 
+		\item Schreibe für $x_1 = \lambda$ und für $x_2=\mu$	
+		\item Setze in die Normalenform ein und löse nach $x_3$ auf.
+		\item Sortiere jeweils in die entsprechenden Klammern der Ebene:			
+	\end{enumerate} 
+	$E:\vec{x}=\left(\begin{array}{c}  \\  \\ \end{array} \right)+\lambda \cdot \left(\begin{array}{c}  \\  \\ \end{array} \right)+\mu \cdot \left(\begin{array}{c}  \\ \\ \end{array} \right)$\end{antwort}
+\begin{frage}Ebenengleichungen der Koordinatenebenen\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item $x_1x_2$-Ebene: $x_3=0$	
+		\item $x_1x_3$-Ebene: $x_2=0$
+		\item $x_2x_3$-Ebene: $x_1=0$
+	\end{itemize}\end{antwort}
+\begin{frage}Welche besondere Lage haben die folgenden Ebenen im Raum?
+	
+	$E_1: 2 \cdot x_1+3  \cdot x_3  -12 = 0$
+	
+	$E_2: 4 \cdot x_3 +5 = 0$\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item $E_1$: Parallel zur $x_2$-Achse	
+		\item $E_2$: Parallel zur $x_1$- und $x_2$-Achse und damit parallel zur $x_1x_2$-Ebene
+	\end{itemize} 
+	\bigskip
+	Merke: Immer parallel zu den x-Achsen, die fehlen.\end{antwort}
+\begin{frage}Schnittwinkel von Gerade g und Ebene E\end{frage}
+\begin{antwort}\Large	
+	\begin{itemize} 
+		\item Der Schnittwinkel von Gerade und Ebene ergibt aus dem Winkel des Normalenvektors $\vec{n}$ der Ebene E und dem Richtungsvektor $\vec{v}$ von g.  
+		\item $\Rightarrow sin(\alpha)=\frac{|\vec{n} \circ \vec{v}|}{|\vec{n}|\cdot|\vec{v}|}$
+	\end{itemize}\end{antwort}
+\begin{frage}Lagebeziehungen von Gerade g und Ebene E	
+	\Large
+	
+	(Die Ebene muss in Normalenform vorliegen! Wenn nötig umwandeln.)\end{frage}
+\begin{antwort}\begin{center}
+	\includegraphics[width=\textwidth]{schema_ebene_gerade}
+	\end{center}\end{antwort}
+\begin{frage}Abstand Punkt - Ebene
+	
+	Bsp: P(1|1|2),
+	
+	E: $2x_1 + 2x_2+ x_3 + 6=0$\end{frage}
+\begin{antwort}\LARGE
+	$d=\frac{|n_1 \cdot x_1 + n_2 \cdot x_2+ n_3 \cdot x_3 + c|}{|\vec{n}|}$
+	
+	\bigskip
+	\large
+	\begin{align*}
+	d&=\frac{|2 \cdot x_1 + 2 \cdot x_2+ x_3 + 6|}{|\vec{n}|} \\
+	&=\frac{|2 \cdot x_1 + 2 \cdot x_2+ x_3 + 6|}{\sqrt{2^2+2^2+1^2}} \\
+	&=\frac{|2 \cdot x_1 + 2 \cdot x_2+ x_3 + 6|}{3}
+	\end{align*}
+	
+	P einsetzen:
+	\[ d=\frac{|2 \cdot 1 + 2 \cdot 1+ 2 + 6|}{3}=4 \]\end{antwort}
+\begin{frage}Abstand von einer parallelen Geraden g zur Ebene E\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item Der Abstand ist überall gleich
+		\item Es genügt den Abstand vom Aufpunkt der Geraden g zur Ebene E zu bestimmen
+		\item Selbes Vorgehen wie bei 'Abstand Punkt-Ebene'	
+	\end{itemize}\end{antwort}
+\begin{frage}Schnittpunkt einer Geraden g mit einer Ebene E\end{frage}
+\begin{antwort}\begin{itemize} 
+		\item Allgemeinen Geradenpunkt G bestimmen
+		\item Geradenpunkt G in die Ebene für $x_1$, $x_2$ und $x_3$ einsetzten und $\lambda$ ausrechnen
+		\item $\lambda$ in Geradenpunkt G einsetzen
+		
+		 $\Rightarrow$ Schnittpunkt S
+	\end{itemize}\end{antwort}
+\begin{frage}Lotfußpunkt von P auf eine Ebene E\end{frage}
+\begin{antwort}\Large	
+	\begin{enumerate} 
+		\item Stelle zunächst eine Hilfsgerade auf:
+		\begin{itemize} 
+			\item Verwende P als Aufpunkt
+			\item Verwende den Normalenvektor von E als Richtungsvektor
+		\end{itemize} 		  
+		\item 
+			Berechne den Schnittpunkt der Hilfsgeraden mit der Ebene
+	\end{enumerate} 
+
+	\begin{center}
+	\begin{tikzpicture}[scale=0.9, >=latex, thick, every node/.style={transform shape, scale=0.85}]
+		% Ebene E als Parallelogramm im Raum füllen
+		\fill[gray!10] (0,0) -- (4,0) -- (5,2) -- (1,2) -- cycle;
+		\draw[black, thick] (0,0) -- (4,0) -- (5,2) -- (1,2) -- cycle;
+		
+		% Beschriftung der Ebene unten rechts
+		\node[below left] at (4,0) {\footnotesize $E$};
+		
+		% Lotfußpunkt F auf der Ebene definieren
+		\coordinate (F) at (2.5,1.0);
+		
+		% Punkt P außerhalb (über) der Ebene definieren
+		\coordinate (P) at (2.5,2.8);
+		
+		% Hilfslote/Lotgerade g durch P und F zeichnen (oberhalb sichtbar, unterhalb gestrichelt)
+		\draw[blue, very thick] (P) -- (F);
+		\draw[blue, dashed, very thick] (F) -- (2.5,0.2);
+		\draw[blue, dashed, very thick] (P) -- (2.5,4);
+		
+		% Beschriftung der Hilffsgeraden g ganz oben am Anfang des Strahls
+		\node[blue, right] at (2.5,2.5) {\footnotesize $g$};
+		
+		% Normalenvektor n der Ebene an F ansetzen
+		\draw[->, green!50!black, very thick] (F) -- (2.5,2.0) node[midway, left] {\footnotesize $\vec{n}_E$};
+		
+		% Punkte P und F einzeichnen und beschriften
+		\fill[red] (P) circle (1.5pt) node[left, red] {\footnotesize $P$};
+		\fill[red] (F) circle (1.5pt) node[below left, red] {\footnotesize $F$};
+		
+	\end{tikzpicture}
+	\end{center}\end{antwort}
+\begin{frage}Abstand zweier paralleler Ebenen E und F\end{frage}
+\begin{antwort}\begin{enumerate} 
+		\item Der Abstand ist überall gleich
+		\item Es genügt den Abstand vom Aufpunkt der Ebene F zur Ebene E zu bestimmen
+		\item Selbes Vorgehen wie bei 'Abstand Punkt-Ebene'	
+	\end{enumerate}\end{antwort}
+\begin{frage}Schnittwinkel zweier Ebenen E und F\end{frage}
+\begin{antwort}\Large	
+	\begin{itemize} 
+		\item Der Schnittwinkel zweier Ebenen ergibt sich aus dem Schnittwinkel der beiden Normalenvektoren $\vec{n_E}$ der Ebene E und $\vec{n_F}$ der Ebene F.  
+		\item $\Rightarrow cos(\alpha)=\frac{|\vec{n_E} \circ \vec{n_F}|}{|\vec{n_E}|\cdot|\vec{n_F}|}$
+	\end{itemize}\end{antwort}
+\begin{frage}Lage zweier Ebenen E und F\end{frage}
+\begin{antwort}\begin{center}
+	\includegraphics[width=\textwidth]{schema_ebene_ebene} 
+	\end{center}\end{antwort}
+\begin{frage}Punkt an einer Gerade oder Ebene spiegeln\end{frage}
+\begin{antwort}\Large	
+	\begin{enumerate} 
+		\item Lotfußpunkt F berechnen
+		\item F in folgende 'Spiegelformel' einsetzen:
+		
+		$\vec{P'}=\vec{P}+2 \cdot \vec{PF}$
+	\end{enumerate} 
+\begin{center}
+\begin{tikzpicture}[scale=1.3, >=latex, thick, every node/.style={transform shape, scale=0.85}]
+	% Ebene E als Parallelogramm im Raum füllen
+	\fill[gray!10] (0,0) -- (4,0) -- (5,2) -- (1,2) -- cycle;
+	\draw[black, thick] (0,0) -- (4,0) -- (5,2) -- (1,2) -- cycle;
+	
+	% Beschriftung der Ebene unten rechts
+	\node[below left] at (4,0) {\footnotesize $E$};
+	
+	% Koordinaten-Ursprung O links unten außerhalb der Ebene definieren
+	\coordinate (O) at (-1,2);
+	
+	% Lotfußpunkt F auf der Ebene definieren
+	\coordinate (F) at (2.5,1.0);
+	
+	% Originalpunkt P außerhalb (über) der Ebene
+	\coordinate (P) at (2.5,2.5);
+	
+	% Spiegelpunkt P' unterhalb der Ebene
+	\coordinate (Pprime) at (2.5,-0.5);
+	
+	% Verbindungsgerade (Lotgerade) zeichnen
+	\draw[->, blue, very thick] (P) -- (F) node[midway, right] {\footnotesize $\vec{PF}$};
+	\draw[blue, dashed, very thick] (F) -- (Pprime);
+	
+	% Ortsvektoren vom Ursprung O aus zeichnen
+	\draw[->, green!60!black, thick] (O) -- (P) node[midway, above] {\footnotesize $\vec{P}$};
+	\draw[->, gray, thin, dashed] (O) -- (Pprime) node[midway, below] {\footnotesize $\vec{P'}$};
+	
+	
+	% Punkte einzeichnen und beschriften
+	\fill[black] (O) circle (1.5pt) node[below left] {\footnotesize $O$};
+	\fill[red] (P) circle (1.5pt) node[above, red] {\footnotesize $P$};
+	\fill[red] (F) circle (1.5pt) node[below left, red] {\footnotesize $F$};
+	\fill[darkgray] (Pprime) circle (1.5pt) node[below, darkgray] {\footnotesize $P'$};
+\end{tikzpicture}
+\end{center}\end{antwort}
+\end{document}

@@ -1,0 +1,123 @@
+% ---------------------------------------------------------------------
+% praeambel_app_standalone.tex
+% ---------------------------------------------------------------------
+
+% ---- Page shape ----
+% ---- Display-Format für Smartphones (z. B. 90mm x 160mm) ----
+\usepackage[
+    paperwidth=105mm,
+    paperheight=148mm,
+    margin=5mm
+]{geometry}
+
+% ---- Background images (odd/even pages) ----
+\usepackage{eso-pic}
+
+
+% font
+\usepackage{lmodern}
+\usepackage[sfdefault]{roboto}
+\usepackage[T1]{fontenc}
+\usepackage{eulervm}
+\usepackage{bm}
+
+
+% ---- Language / Encoding ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}  
+\usepackage{csquotes}
+
+% improve line breaks and hyphenation
+\usepackage{hyphenat}
+\usepackage{microtype}
+\usepackage{impnattypo}
+
+% ---- Math ----
+\usepackage{amsmath}          
+\usepackage{amssymb}          
+\usepackage{extarrows}        
+
+% ---- Tables ----
+\usepackage{array}            
+\usepackage{tabularx}
+\usepackage{diagbox}          
+
+% Defined custom column type 'C' for fixed-width centered columns (e.g. NEWNEWNEW rule)
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ---- Graphics / Diagrams ----
+\usepackage{graphicx}         
+\usepackage{tikz}             
+\usetikzlibrary{patterns}
+
+% blockquotes
+\usepackage[most]{tcolorbox}
+\usepackage[svgnames]{xcolor}
+
+
+% enumerations
+\usepackage{enumerate}
+
+% ---- Custom Math Commands ----
+\newcommand{\R}{\mathbb{R}}                     
+\newcommand{\D}{\mathbb{D}}                     
+\newcommand{\abs}[1]{\left|#1\right|}           
+\newcommand{\mal}{\cdot}                        
+\newcommand{\std}{\sigma}
+\newcommand{\Var}{\text{Var}}                       
+
+% ---- Card Environments ----
+% ---- Card Environments (für Mobilgeräte optimiert) ----
+\newenvironment{frage}{%
+	\clearpage
+	\vspace*{\fill}
+	\begin{center}\large
+}{%
+	\end{center}
+	\vspace*{\fill}
+}
+
+\newenvironment{antwort}{%
+	\clearpage
+	\vspace*{\fill}
+	\begin{center}
+}{%
+	~
+
+	~
+
+	
+
+	\end{center}
+	\vspace*{\fill}
+}
+
+
+
+
+% adjust these paths/filenames to your actual image files
+\newcommand{\BgOdd}{background_odd.pdf}
+\newcommand{\BgEven}{background_even.pdf}
+
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \ifodd\value{page}
+      \includegraphics[width=\paperwidth,height=\paperheight]{\BgOdd}%
+    \else
+      \includegraphics[width=\paperwidth,height=\paperheight]{\BgEven}%
+    \fi
+  }%
+}
+
+
+\newtcolorbox{marked}{
+  enhanced,
+  frame hidden,       
+  colback=gray!5!white,       
+  borderline west={3pt}{0pt}{SkyBlue}, 
+  boxrule=0pt,         
+  rounded corners,
+%   halign=center,       
+%   valign=center,       
+}

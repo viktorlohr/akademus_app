@@ -1,0 +1,82 @@
+================================================================================
+DATENSCHUTZERKLÄRUNG
+================================================================================
+
+1. ALLGEMEINES UND VERANTWORTLICHER
+
+Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir verarbeiten 
+Ihre Daten ausschließlich auf Grundlagen der gesetzlichen Bestimmungen (DSGVO, TKG).
+
+Verantwortlicher für die Datenverarbeitung auf dieser Website/in dieser Anwendung ist:
+
+
+AKADEMUS GmbH
+Sitz der Gesellschaft: Prüfeninger Str. 7, 93049 Regensburg - Deutschland
+
+Registergericht: Amtsgericht Regensburg, HRB 22551
+Geschäftsführer: Nicolas Klupak
+
+Telefon: 0941 7977144
+
+--------------------------------------------------------------------------------
+2. ERHEBUNG UND SPEICHERUNG PERSONENBEZOGENER DATEN
+
+Wir erheben, speichern oder verarbeiten auf dieser App 
+KEINE PERSONENBEZOGENEN DATEN. 
+
+* Es werden keine Registrierungen oder Benutzerkonten vorausgesetzt.
+* Es werden keine Formulare zur Eingabe persönlicher Daten bereitgestellt.
+* Es werden keine Tracking-Tools, Analyse-Dienste (wie Google Analytics) oder 
+  Social-Media-Plugins eingesetzt.
+* Es werden keine Cookies zur Nachverfolgung Ihres Nutzungsverhaltens verwendet.
+
+--------------------------------------------------------------------------------
+3. SERVER-LOG-FILES (TECHNISCH NOTWENDIGE DATEN)
+
+Beim Aufruf unserer Website/Dienste werden durch den Webspace-Provider automatisch 
+Informationen in sogenannten Server-Log-Files erhoben und gespeichert, die Ihr 
+Browser automatisch an uns übermittelt. Dies sind:
+
+* Browsertyp und Browserversion
+* Verwendetes Betriebssystem
+* Referrer URL (die zuvor besuchte Seite)
+* Hostname des zugreifenden Rechners
+* Uhrzeit der Serveranfrage
+* IP-Adresse (vom Provider in der Regel anonymisiert)
+
+Diese Daten sind technisch notwendig, um die Website korrekt anzuzeigen und die 
+Stabilität sowie Sicherheit der Systeme zu gewährleisten (Rechtsgrundlage: Art. 6 
+Abs. 1 lit. f DSGVO). Eine Zusammenführung dieser Daten mit anderen Datenquellen 
+wird nicht vorgenommen.
+
+--------------------------------------------------------------------------------
+4. KONTAKTAUFNAHME PER E-MAIL
+
+Wenn Sie uns per E-Mail kontaktieren, werden die von Ihnen mitgeteilten Daten 
+(Ihre E-Mail-Adresse, ggf. Ihr Name und Ihre Nachricht) von uns gespeichert, um 
+Ihre Anfrage zu beantworten. Diese Daten geben wir nicht ohne Ihre Einwilligung 
+weiter. 
+
+Die Verarbeitung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, 
+sofern Ihre Anfrage mit der Erfüllung eines Vertrags zusammenhängt oder zur 
+Durchführung vorvertraglicher Maßnahmen erforderlich ist. In allen übrigen Fällen 
+beruht die Verarbeitung auf unserem berechtigten Interesse an der effektiven 
+Bearbeitung der an uns gerichteten Anfragen (Art. 6 Abs. 1 lit. f DSGVO).
+
+--------------------------------------------------------------------------------
+5. IHRE RECHTE
+
+Ihnen stehen grundsätzlich die Rechte auf Auskunft, Berichtigung, Löschung, 
+Einschränkung der Verarbeitung, Datenübertragbarkeit, Widerruf und Widerspruch 
+bezüglich Ihrer bei uns gespeicherten Daten zu. 
+
+Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht 
+verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt 
+worden sind, können Sie sich bei der zuständigen Aufsichtsbehörde beschweren.
+
+Wenn Sie Fragen zum Datenschutz bei Akademus haben, wenden Sie sich bitte an die 
+oben angegebene Kontaktadresse.
+
+--------------------------------------------------------------------------------
+Stand: August 2026
+================================================================================

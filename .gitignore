@@ -1,0 +1,114 @@
+flashcards_source/.rendered/
+# assets/.build_cache.json
+# assets/flashcards/
+# assets/flashcards_manifest.json
+
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# User-specific stuff
+.idea//workspace.xml
+.idea//tasks.xml
+.idea//usage.statistics.xml
+.idea//dictionaries
+.idea//shelf
+
+# Flutter / Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+ephemeral/
+.dart_tool/
+.idea/
+
+
+
+# Symbol files
+*.jml
+*.smod
+
+# Obfuscation map files
+/app/*.symbols
+
+# Flutter build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Android specific
+.gradle/
+local.properties
+**/android/captures/
+**/android/gradle/wrapper/gradle-wrapper.jar
+**/android/githooks/
+**/android/app/signingReport.txt
+**/android/app/app.iml
+**/android/idea/
+**/android/out/
+**/android/key.properties
+
+# iOS / macOS specific
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flt
+**/ios/Runner.xcworkspace
+**/ios/Pods/
+**/ios/Podfile.lock
+**/macOS/Flutter/ephemeral/
+**/macOS/Pods/
+**/macOS/Podfile.lock
+DerivedData/
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxproj.dev
+
+# Linux specific
+**/linux/flutter/ephemeral/
+
+# Windows specific
+**/windows/flutter/ephemeral/
+**/windows/flutter/ephemeral/Generated.props
+
+# Web specific
+**/web/icons/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Coverage
+coverage/
+
+# Environments / Sensitive Data
+.env
+.env.*
