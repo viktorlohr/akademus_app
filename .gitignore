@@ -112,3 +112,7 @@ coverage/
 # Environments / Sensitive Data
 .env
 .env.*
+
+# firebase 
+.firebase/
+build/
