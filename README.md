@@ -76,7 +76,7 @@ git push origin feature/your-feature-name
 - [ ] Long-Term Stats
 
 ### Viktor
-- [ ] auf firebase hosten
+- [x] auf firebase hosten
 - [ ] Session
 - [ ] Overview Screen
 - [ ] KI Agent raus
