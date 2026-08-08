@@ -1,8 +1,9 @@
+<<<<<<< Updated upstream
+## 📝 TODO
+=======
 # Team Collaboration & Branching Guide
 
 Welcome! To keep our repository clean, stable, and free of code conflicts, we follow a feature-branch workflow.
-
----
 
 ## 🚨 The Gold Rule of Our Repository
 > [!WARNING]
@@ -26,6 +27,14 @@ git checkout main
 git pull origin main
 ```
 
+> [!TIP]
+> The *most important* habit is **pulling main regularly**  into your local feature branch via 
+> ```bash 
+> git pull origin main
+> ```
+> Resolving conflicts locally **virtually eliminates** merge conflicts when opening your Pull Request online (as long as ```main``` doesn't change before your PR is merged).
+
+---
 ### 2. Create a Dedicated Feature Branch
 Create and switch to a descriptive branch for what you are building:
 ```bash
@@ -68,6 +77,7 @@ git push origin feature/your-feature-name
 
 
 # 📝 TODO
+>>>>>>> Stashed changes
 ### Michi & Viktor
 - [ ] recherchieren, wie man ordentlich über git zusammenarbeitet. 
 
