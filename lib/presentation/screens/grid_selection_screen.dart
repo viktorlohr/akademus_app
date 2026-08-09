@@ -7,12 +7,16 @@ class GridSelectionScreen extends StatelessWidget {
   final Widget Function(String label) onItemSelected;
   final String backgroundPath;
 
+  /// Optional CTA rendered under the grid (e.g. "Session starten").
+  final Widget? action;
+
   const GridSelectionScreen({
     super.key,
     required this.title,
     required this.items,
     required this.onItemSelected,
     this.backgroundPath = 'assets/images/background_female.jpg',
+    this.action,
   });
 
   @override
@@ -101,6 +105,12 @@ class GridSelectionScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  if (action != null) ...[
+                    const SizedBox(height: 16),
+                    action!,
+                    // clears the Impressum footer
+                    const SizedBox(height: 24),
+                  ],
                 ],
               ),
             ),

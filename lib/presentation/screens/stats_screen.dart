@@ -1,25 +1,22 @@
-// lib/presentation/screens/stats_screen.dart
 import 'package:flutter/material.dart';
+import '../../models/session_score.dart';
+import '../../models/study_session_config.dart';
 import '../widgets/app_chrome.dart';
 import 'flashcard_screen.dart';
 
-class SessionResult {
-  final int total;
-  final int known;
-  final int unknown;
-  final int maxStreak;
-  const SessionResult({
-    required this.total,
-    required this.known,
-    required this.unknown,
-    required this.maxStreak,
-  });
-}
-
 class StatsScreen extends StatelessWidget {
-  final String topic;
-  final SessionResult result;
-  const StatsScreen({super.key, required this.topic, required this.result});
+  final StudySessionConfig config;
+  final SessionScore score;
+
+  /// Best previous run on the same categories, if any.
+  final SessionScore? previousBest;
+
+  const StatsScreen({
+    super.key,
+    required this.config,
+    required this.score,
+    this.previousBest,
+  });
 
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
@@ -31,7 +28,10 @@ class StatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final knownPct = result.total > 0 ? result.known / result.total : 0.0;
+    final isRecord =
+        config.rated &&
+        (previousBest == null || score.points > previousBest!.points);
+
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -60,9 +60,14 @@ class StatsScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text('🏆', style: TextStyle(fontSize: 42)),
                     Text(
-                      'Sitzung abgeschlossen!',
+                      isRecord ? '🏆' : '✅',
+                      style: const TextStyle(fontSize: 42),
+                    ),
+                    Text(
+                      config.rated
+                          ? 'Session abgeschlossen!'
+                          : 'Sitzung abgeschlossen!',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -70,7 +75,7 @@ class StatsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      topic,
+                      config.title,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withValues(alpha: 0.8),
@@ -80,6 +85,77 @@ class StatsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
+
+              // Grade card — only meaningful for rated runs.
+              if (config.rated) ...[
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 18,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            score.grade,
+                            style: TextStyle(
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold,
+                              color: myOrange,
+                            ),
+                          ),
+                          Text(
+                            'Note',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            '${score.points}',
+                            style: TextStyle(
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold,
+                              color: myBlue,
+                            ),
+                          ),
+                          Text(
+                            'Punkte',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  isRecord
+                      ? 'Neue Bestleistung!'
+                      : 'Bestleistung: ${previousBest!.points} Punkte',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: isRecord ? myGreen : Colors.grey[700],
+                  ),
+                ),
+                const SizedBox(height: 14),
+              ],
+
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -92,7 +168,7 @@ class StatsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '${(knownPct * 100).round()}% gewusst',
+                      '${score.percent}% gewusst',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -100,11 +176,20 @@ class StatsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      value: knownPct,
-                      minHeight: 12,
-                      backgroundColor: myRed.withValues(alpha: 0.2),
-                      valueColor: AlwaysStoppedAnimation<Color>(myGreen),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: score.accuracy,
+                        minHeight: 12,
+                        backgroundColor: myRed.withValues(alpha: 0.2),
+                        valueColor: AlwaysStoppedAnimation<Color>(myGreen),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${score.known}/${score.total} richtig · '
+                      'längste Serie: ${score.maxStreak}',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[700]),
                     ),
                   ],
                 ),
@@ -114,7 +199,7 @@ class StatsScreen extends StatelessWidget {
                 onPressed: () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(category: topic),
+                    builder: (_) => FlashcardScreen(config: config),
                   ),
                 ),
                 style: ElevatedButton.styleFrom(

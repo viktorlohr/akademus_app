@@ -1,7 +1,10 @@
-// lib/presentation/screens/category_flashcard_screen.dart
+// lib/presentation/screens/flashcard_screen.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../../models/session_score.dart';
+import '../../models/study_session_config.dart';
 import '../../services/flashcard_service.dart';
+import '../../storage/session_history_storage.dart';
 import 'stats_screen.dart';
 
 /// Must match paperwidth:paperheight in
@@ -12,9 +15,13 @@ import 'stats_screen.dart';
 const double kCardAspectRatio = 105 / 148;
 
 class FlashcardScreen extends StatefulWidget {
-  final String category;
+  final StudySessionConfig config;
 
-  const FlashcardScreen({super.key, required this.category});
+  const FlashcardScreen({super.key, required this.config});
+
+  /// Shorthand for "study this one topic, everything, weakest first".
+  FlashcardScreen.category(String category, {super.key})
+    : config = StudySessionConfig.single(category);
 
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
@@ -24,7 +31,9 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+
   final _flashcardService = FlashcardService();
+  final _history = SessionHistoryStorage();
 
   List<StudyCard> _cards = [];
   bool _isLoading = true;
@@ -36,6 +45,10 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   int _unknownCount = 0;
   int _currentStreak = 0;
   int _maxStreak = 0;
+
+  /// Guards against a second rating landing while the last card is still
+  /// being persisted — swipe + button tap can otherwise both fire.
+  bool _isFinishing = false;
 
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
@@ -56,7 +69,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   }
 
   Future<void> _load() async {
-    final cards = await _flashcardService.getCardsForCategory(widget.category);
+    final cards = await _flashcardService.getCardsForSession(widget.config);
     if (!mounted) return;
     setState(() {
       _cards = cards;
@@ -85,41 +98,61 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   }
 
   Future<void> _rate(bool known) async {
+    if (_isFinishing) return;
     if (_currentIndex >= _cards.length) return;
     final studyCard = _cards[_currentIndex];
 
+    final isLast = _currentIndex == _cards.length - 1;
+    if (isLast) _isFinishing = true;
+
     await _flashcardService.rateCard(studyCard.card.id, known);
+    if (!mounted) return;
 
-    setState(() {
-      if (known) {
-        _knownCount++;
-        _currentStreak++;
-        if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
-      } else {
-        _unknownCount++;
-        _currentStreak = 0;
-      }
+    if (known) {
+      _knownCount++;
+      _currentStreak++;
+      if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
+    } else {
+      _unknownCount++;
+      _currentStreak = 0;
+    }
 
-      final isLast = _currentIndex == _cards.length - 1;
-      if (isLast) {
-        final result = SessionResult(
-          total: _cards.length,
-          known: _knownCount,
-          unknown: _unknownCount,
-          maxStreak: _maxStreak,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => StatsScreen(topic: widget.category, result: result),
-          ),
-        );
-      } else {
+    if (!isLast) {
+      setState(() {
         _currentIndex++;
         _isFront = true;
         _controller.reset();
-      }
-    });
+      });
+      return;
+    }
+
+    final score = SessionScore(
+      title: widget.config.title,
+      categories: widget.config.categories,
+      total: _cards.length,
+      known: _knownCount,
+      maxStreak: _maxStreak,
+      finishedAt: DateTime.now(),
+    );
+
+    // Only graded runs go into history; practice shouldn't pollute it.
+    SessionScore? best;
+    if (widget.config.rated) {
+      best = await _history.bestFor(widget.config.categories);
+      await _history.add(score);
+    }
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StatsScreen(
+          config: widget.config,
+          score: score,
+          previousBest: best,
+        ),
+      ),
+    );
   }
 
   void _goHome(BuildContext context) =>
@@ -129,14 +162,14 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text(widget.category)),
+        appBar: AppBar(title: Text(widget.config.title)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_cards.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text(widget.category)),
+        appBar: AppBar(title: Text(widget.config.title)),
         body: const Center(child: Text("Keine Karten für dieses Thema.")),
       );
     }
@@ -149,7 +182,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       appBar: AppBar(
         title: GestureDetector(
           onTap: () => _goHome(context),
-          child: Text(widget.category, style: TextStyle(color: myBlue)),
+          child: Text(widget.config.title, style: TextStyle(color: myBlue)),
         ),
         toolbarHeight: 70,
         backgroundColor: Colors.white,
@@ -180,7 +213,11 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.category,
+                      // In a mixed session the deck title is generic, so
+                      // show which topic the current card actually is.
+                      widget.config.categories.length > 1
+                          ? studyCard.card.category
+                          : widget.config.title,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
