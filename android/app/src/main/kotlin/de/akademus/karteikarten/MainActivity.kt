@@ -1,4 +1,4 @@
-package com.example.prototyp_latex_pipeline
+package de.akademus.karteikarten
 
 import io.flutter.embedding.android.FlutterActivity
 

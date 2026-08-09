@@ -1,6 +1,6 @@
 {
-    "name": "prototyp_latex_pipeline",
-    "short_name": "prototyp_latex_pipeline",
+    "name": "de.akademus.karteikarten",
+    "short_name": "de.akademus.karteikarten",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
