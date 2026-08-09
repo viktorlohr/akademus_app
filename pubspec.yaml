@@ -17,6 +17,7 @@ dependencies:
   flutter_markdown_plus: ^1.0.12
   web: ^1.1.1
   url_launcher: ^6.3.2
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -28,7 +29,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/datenschutz.txt
+    - assets/datenschutz.html
     - assets/images/
     - assets/flashcards/
     - assets/flashcards/analysis/

@@ -13,7 +13,7 @@
       },
       {
         "source": "/datenschutz/**",
-        "destination": "/datenschutz/index.html"
+        "destination": "/assets/assets/datenschutz.html"
       },
       {
         "source": "**",
