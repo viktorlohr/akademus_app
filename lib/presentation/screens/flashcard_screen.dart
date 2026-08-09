@@ -150,6 +150,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
           config: widget.config,
           score: score,
           previousBest: best,
+          onRetry: (_) => FlashcardScreen(config: widget.config),
         ),
       ),
     );

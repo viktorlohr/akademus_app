@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'presentation/screens/topic_selection_screen.dart';
+import 'presentation/screens/quiz_topic_selection_screen.dart';
 import 'presentation/widgets/app_chrome.dart';
 
 void main() => runApp(const MaterialApp(home: HomeScreen()));
@@ -60,6 +61,12 @@ class HomeScreen extends StatelessWidget {
                     label: 'Mathe Karteikarten',
                     icon: Icons.style_outlined,
                     destination: TopicSelectionScreen(),
+                  ),
+                  const SizedBox(height: 16),
+                  const MenuButton(
+                    label: 'Quiz',
+                    icon: Icons.quiz_outlined,
+                    destination: QuizTopicSelectionScreen(),
                   ),
                   const SizedBox(height: 16),
                   const MenuButton(

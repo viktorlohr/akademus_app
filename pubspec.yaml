@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   meta: ^1.12.0
+  flutter_math_fork: ^0.7.4
+  flutter_markdown_plus: ^1.0.12
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +32,4 @@ flutter:
     - assets/flashcards/geometrie/
     - assets/flashcards/stochastik/
     - assets/flashcards_manifest.json
+    - assets/quiz_manifest.json

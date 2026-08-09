@@ -1,0 +1,81 @@
+[
+  {
+    "id": "analysis-1",
+    "category": "Analysis",
+    "type": "singleChoice",
+    "prompt": "Was ist die Ableitung von $f(x) = x^3$?",
+    "options": [
+      { "id": "a", "text": "$f'(x) = 3x^2$", "isCorrect": true },
+      { "id": "b", "text": "$f'(x) = x^2$", "isCorrect": false },
+      { "id": "c", "text": "$f'(x) = 3x$", "isCorrect": false },
+      { "id": "d", "text": "$f'(x) = x^3$", "isCorrect": false }
+    ],
+    "explanation": "Potenzregel: $\\frac{d}{dx} x^n = n \\cdot x^{n-1}$, also $3x^{3-1} = 3x^2$."
+  },
+  {
+    "id": "analysis-2",
+    "category": "Analysis",
+    "type": "multipleChoice",
+    "prompt": "Welche der folgenden Aussagen über $f(x) = e^x$ sind **wahr**?",
+    "options": [
+      { "id": "a", "text": "$f'(x) = e^x$", "isCorrect": true },
+      { "id": "b", "text": "$f(0) = 1$", "isCorrect": true },
+      { "id": "c", "text": "$f$ ist für alle $x$ negativ", "isCorrect": false },
+      { "id": "d", "text": "$f$ hat eine Nullstelle", "isCorrect": false }
+    ],
+    "explanation": "Die e-Funktion ist ihre eigene Ableitung, stets positiv, und $e^0 = 1$."
+  },
+  {
+    "id": "analysis-3",
+    "category": "Analysis",
+    "type": "shortAnswer",
+    "prompt": "Berechne das Integral $\\int_0^1 2x \\, dx$.",
+    "acceptedAnswers": ["1", "1.0"],
+    "explanation": "$\\int_0^1 2x\\,dx = [x^2]_0^1 = 1 - 0 = 1$"
+  },
+  {
+    "id": "geometrie-1",
+    "category": "Geometrie",
+    "type": "singleChoice",
+    "prompt": "Wie lautet der Satz des Pythagoras für ein rechtwinkliges Dreieck mit Katheten $a$, $b$ und Hypotenuse $c$?",
+    "options": [
+      { "id": "a", "text": "$a^2 + b^2 = c^2$", "isCorrect": true },
+      { "id": "b", "text": "$a + b = c$", "isCorrect": false },
+      { "id": "c", "text": "$a^2 - b^2 = c^2$", "isCorrect": false },
+      { "id": "d", "text": "$a \\cdot b = c^2$", "isCorrect": false }
+    ]
+  },
+  {
+    "id": "geometrie-2",
+    "category": "Geometrie",
+    "type": "shortAnswer",
+    "prompt": "Ein Kreis hat den Radius $r = 3$. Wie groß ist die Fläche (auf zwei Nachkommastellen gerundet)? Nutze $\\pi \\approx 3.14159$.\n\n*Formel:* $A = \\pi r^2$",
+    "acceptedAnswers": ["28.27", "28,27"],
+    "explanation": "$A = \\pi \\cdot 3^2 = 9\\pi \\approx 28.27$"
+  },
+  {
+    "id": "stochastik-1",
+    "category": "Stochastik",
+    "type": "singleChoice",
+    "prompt": "Eine faire Münze wird zweimal geworfen. Wie groß ist die Wahrscheinlichkeit für **genau einmal Kopf**?",
+    "options": [
+      { "id": "a", "text": "$\\frac{1}{4}$", "isCorrect": false },
+      { "id": "b", "text": "$\\frac{1}{2}$", "isCorrect": true },
+      { "id": "c", "text": "$\\frac{1}{3}$", "isCorrect": false },
+      { "id": "d", "text": "$1$", "isCorrect": false }
+    ],
+    "explanation": "Von den 4 gleich wahrscheinlichen Ausgängen (KK, KZ, ZK, ZZ) haben 2 genau einmal Kopf: $\\frac{2}{4} = \\frac{1}{2}$."
+  },
+  {
+    "id": "stochastik-2",
+    "category": "Stochastik",
+    "type": "multipleChoice",
+    "prompt": "Welche Eigenschaften muss eine Wahrscheinlichkeitsverteilung $P$ erfüllen?",
+    "options": [
+      { "id": "a", "text": "$P(A) \\geq 0$ für alle Ereignisse $A$", "isCorrect": true },
+      { "id": "b", "text": "$P(\\Omega) = 1$", "isCorrect": true },
+      { "id": "c", "text": "$P(A) > 1$ ist möglich", "isCorrect": false },
+      { "id": "d", "text": "$P(\\emptyset) = 1$", "isCorrect": false }
+    ]
+  }
+]

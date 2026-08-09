@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/session_score.dart';
 import '../../models/study_session_config.dart';
 import '../widgets/app_chrome.dart';
-import 'flashcard_screen.dart';
 
 class StatsScreen extends StatelessWidget {
   final StudySessionConfig config;
@@ -11,10 +10,16 @@ class StatsScreen extends StatelessWidget {
   /// Best previous run on the same categories, if any.
   final SessionScore? previousBest;
 
+  /// Builds the screen to push when the user taps "Nochmal üben". Kept as
+  /// a callback so this screen stays agnostic of which study mode
+  /// (flashcards, quiz, ...) produced the score.
+  final WidgetBuilder onRetry;
+
   const StatsScreen({
     super.key,
     required this.config,
     required this.score,
+    required this.onRetry,
     this.previousBest,
   });
 
@@ -198,9 +203,7 @@ class StatsScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(config: config),
-                  ),
+                  MaterialPageRoute(builder: onRetry),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myBlue,
