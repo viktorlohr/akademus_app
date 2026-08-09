@@ -243,12 +243,10 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                               child: Transform(
                                 transform: perspective()..rotateY(angle),
                                 alignment: Alignment.center,
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: _CardImage(
-                                      assetPath: studyCard.card.frontImage,
-                                    ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: _CardImage(
+                                    assetPath: studyCard.card.frontImage,
                                   ),
                                 ),
                               ),
@@ -265,12 +263,10 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                               child: Transform(
                                 transform: perspective()..rotateY(angle - pi),
                                 alignment: Alignment.center,
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: _CardImage(
-                                      assetPath: studyCard.card.backImage,
-                                    ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: _CardImage(
+                                    assetPath: studyCard.card.backImage,
                                   ),
                                 ),
                               ),
