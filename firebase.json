@@ -12,6 +12,10 @@
         "destination": "/edit-quiz/index.html"
       },
       {
+        "source": "/datenschutz/**",
+        "destination": "/datenschutz/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
