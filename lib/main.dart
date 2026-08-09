@@ -63,12 +63,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const MenuButton(
-                    label: 'KI Mathe-Tutor',
-                    icon: Icons.auto_awesome_outlined,
-                    destination: PlaceholderScreen(title: 'KI Tutor Chat'),
-                  ),
-                  const SizedBox(height: 16),
-                  const MenuButton(
                     label: 'Lern-Statistiken',
                     icon: Icons.insert_chart_outlined,
                     destination: PlaceholderScreen(title: ''),
