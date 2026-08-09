@@ -5,9 +5,9 @@
 # must build first, or its build step would wipe the nested admin output.
 set -euo pipefail
 
-flutter build web
+flutter build web --wasm
 
-flutter build web \
+flutter build web --wasm \
   --target=lib/admin_main.dart \
   --base-href /edit-quiz/ \
   --output=build/web/edit-quiz
