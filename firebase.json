@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "/edit-quiz/**",
+        "destination": "/edit-quiz/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

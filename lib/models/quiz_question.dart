@@ -31,6 +31,12 @@ class QuizOption {
     text: json['text'] as String,
     isCorrect: json['isCorrect'] as bool? ?? false,
   );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'text': text,
+    'isCorrect': isCorrect,
+  };
 }
 
 /// A single quiz question. [prompt] and [explanation] are plain strings
@@ -83,6 +89,16 @@ class QuizQuestion {
       explanation: json['explanation'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'category': category,
+    'type': type.name,
+    'prompt': prompt,
+    if (options.isNotEmpty) 'options': options.map((o) => o.toJson()).toList(),
+    if (acceptedAnswers.isNotEmpty) 'acceptedAnswers': acceptedAnswers,
+    if (explanation != null && explanation!.isNotEmpty) 'explanation': explanation,
+  };
 
   /// Grades a set of selected option ids (choice types) or a single typed
   /// string (short answer, ignored for choice types).
