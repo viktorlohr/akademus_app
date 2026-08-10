@@ -213,6 +213,24 @@ firebase deploy
   `flutter clean` before rebuilding, don't assume the plugin/code is
   broken.
 
+## Android / Play Store signing
+
+`android/app/build.gradle.kts` signs release builds with the **debug**
+keystore (`signingConfig = signingConfigs.getByName("debug")`). This is
+intentional, not an unfinished TODO — the release signing key is
+deliberately kept out of this repo and off the developer's machine
+entirely. Whoever manages the Play Console upload holds their own keystore
+and re-signs the built `.aab` themselves before uploading:
+```
+jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+  -keystore <their-release-keystore> app-release.aab <key-alias>
+```
+`jarsigner` overwrites the existing (debug) signature, so no change to
+this Gradle config is needed to support that. Don't add a `key.properties`
+/ release `signingConfig` here without checking with whoever owns the
+upload process first — that would put the release key back in play as
+something this repo's build expects to find.
+
 ## Known placeholders / not yet implemented
 
 - Home screen's "Lern-Statistiken" button routes to `PlaceholderScreen` —

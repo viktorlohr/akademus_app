@@ -1,6 +1,6 @@
 {
-    "name": "de.akademus.karteikarten",
-    "short_name": "de.akademus.karteikarten",
+    "name": "Akademus App",
+    "short_name": "Akademus App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
