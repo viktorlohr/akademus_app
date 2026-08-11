@@ -19,6 +19,12 @@ class FlashcardScreen extends StatefulWidget {
 
   const FlashcardScreen({super.key, required this.config});
 
+  /// Casual, ungraded browsing of a single category — tapping a topic
+  /// tile. No "knew it"/"didn't know" rating and no summary screen at
+  /// the end, just a "Weiter" button advancing through the deck.
+  FlashcardScreen.category(String category, {super.key})
+    : config = StudySessionConfig.single(category);
+
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
 }
@@ -45,6 +51,11 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   /// Guards against a second rating landing while the last card is still
   /// being persisted — swipe + button tap can otherwise both fire.
   bool _isFinishing = false;
+
+  /// The only branch point between graded sessions (rating buttons,
+  /// proficiency tracking, a [StatsScreen] at the end) and casual
+  /// topic-tile browsing (a plain "Weiter" button, nothing recorded).
+  bool get _graded => widget.config.rated;
 
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
@@ -84,6 +95,10 @@ class _FlashcardScreenState extends State<FlashcardScreen>
 
   void _handleHorizontalDrag(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
+    if (!_graded) {
+      if (velocity.abs() > 200) _nextCard();
+      return;
+    }
     if (velocity < -200) {
       // Swiped Left -> Falsch / Wrong
       _rate(false);
@@ -91,6 +106,16 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       // Swiped Right -> Richtig / Correct
       _rate(true);
     }
+  }
+
+  /// Casual-mode advance: no rating, no proficiency update.
+  void _nextCard() {
+    if (_currentIndex >= _cards.length - 1) return;
+    setState(() {
+      _currentIndex++;
+      _isFront = true;
+      _controller.reset();
+    });
   }
 
   Future<void> _rate(bool known) async {
@@ -173,6 +198,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
 
     final studyCard = _cards[_currentIndex];
     final progress = (_currentIndex + 1) / _cards.length;
+    final isLast = _currentIndex == _cards.length - 1;
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -203,53 +229,62 @@ class _FlashcardScreenState extends State<FlashcardScreen>
               ),
             ),
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      // In a mixed session the deck title is generic, so
-                      // show which topic the current card actually is.
-                      widget.config.categories.length > 1
-                          ? studyCard.card.category
-                          : widget.config.title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: myBlue,
+            if (_graded)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        // In a mixed session the deck title is generic, so
+                        // show which topic the current card actually is.
+                        widget.config.categories.length > 1
+                            ? studyCard.card.category
+                            : widget.config.title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: myBlue,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${_currentIndex + 1}/${_cards.length}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[800]),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    _CompactStat(
-                      icon: Icons.check_circle,
-                      label: '$_knownCount',
-                      color: myGreen,
-                    ),
-                    const SizedBox(width: 8),
-                    _CompactStat(
-                      icon: Icons.local_fire_department,
-                      label: '$_currentStreak',
-                      color: myOrange,
-                    ),
-                    const SizedBox(width: 8),
-                    _CompactStat(
-                      icon: Icons.cancel,
-                      label: '$_unknownCount',
-                      color: myRed,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      Text(
+                        '${_currentIndex + 1}/${_cards.length}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _CompactStat(
+                        icon: Icons.check_circle,
+                        label: '$_knownCount',
+                        color: myGreen,
+                      ),
+                      const SizedBox(width: 8),
+                      _CompactStat(
+                        icon: Icons.local_fire_department,
+                        label: '$_currentStreak',
+                        color: myOrange,
+                      ),
+                      const SizedBox(width: 8),
+                      _CompactStat(
+                        icon: Icons.cancel,
+                        label: '$_unknownCount',
+                        color: myRed,
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            else
+              Text(
+                '${_currentIndex + 1}/${_cards.length}',
+                style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+              ),
             const SizedBox(height: 16),
             Expanded(
               child: Center(
@@ -314,34 +349,57 @@ class _FlashcardScreenState extends State<FlashcardScreen>
               ),
             ),
             const SizedBox(height: 16),
-            AnimatedOpacity(
-              opacity: _isFront ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 300),
-              child: IgnorePointer(
-                ignoring: _isFront,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _RatingButton(
-                        label: 'Falsch',
-                        icon: Icons.close,
-                        color: myRed,
-                        onPressed: () => _rate(false),
+            if (_graded)
+              AnimatedOpacity(
+                opacity: _isFront ? 0.0 : 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: IgnorePointer(
+                  ignoring: _isFront,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _RatingButton(
+                          label: 'Falsch',
+                          icon: Icons.close,
+                          color: myRed,
+                          onPressed: () => _rate(false),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _RatingButton(
-                        label: 'Richtig',
-                        icon: Icons.check,
-                        color: myGreen,
-                        onPressed: () => _rate(true),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _RatingButton(
+                          label: 'Richtig',
+                          icon: Icons.check,
+                          color: myGreen,
+                          onPressed: () => _rate(true),
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+              )
+            else
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: isLast ? null : _nextCard,
+                  icon: const Icon(Icons.arrow_forward),
+                  label: const Text(
+                    'Weiter',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: myBlue,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.grey[400],
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  ],
+                    elevation: 4,
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 10),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/categories.dart';
 import 'grid_selection_screen.dart';
-import 'flashcard_screen_casual.dart';
+import 'flashcard_screen.dart';
 import 'session_setup_screen.dart';
 
 class TopicSelectionScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class TopicSelectionScreen extends StatelessWidget {
         for (final c in flashcardCategories) {'label': c.label, 'icon': c.icon},
       ],
       // Straight into study mode — no overview/list screen in between.
-      onItemSelected: (label) => FlashcardScreenCasual(category: label),
+      onItemSelected: (label) => FlashcardScreen.category(label),
       action: Builder(
         builder: (context) => SizedBox(
           width: double.infinity,
