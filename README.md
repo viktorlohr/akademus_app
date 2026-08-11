@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-## 📝 TODO
-=======
 # Team Collaboration & Branching Guide
 
 Welcome! To keep our repository clean, stable, and free of code conflicts, we follow a feature-branch workflow.
