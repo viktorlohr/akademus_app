@@ -5,11 +5,10 @@ Guidance for Claude Code when working in this repo.
 ## Project
 
 `akademus_app` — a Flutter app for Akademus GmbH. German-language math learning
-app for pupils: flashcard study (Analysis, Geometrie, Stochastik) and a quiz
-mode (Markdown + LaTeX questions, live-rendered), with a stats section
-currently a placeholder on the home screen. Deployed to Firebase Hosting at
-https://akademus-app-preview.web.app — see "Deployment" below. Current work
-is on branch `feature/quiz`, open as PR #9 against `main`.
+app for pupils: flashcard study (Analysis, Geometrie, Stochastik), a quiz
+mode (Markdown + LaTeX questions, live-rendered), and a "Lern-Statistiken"
+progress screen (see "Progress screen" below). Deployed to Firebase Hosting
+at https://akademus-app-preview.web.app — see "Deployment" below.
 
 - All user-facing strings are German. Keep new UI text German unless told
   otherwise.
@@ -161,9 +160,12 @@ original guess that a parallel scoring system wasn't needed.
 `lib/admin_main.dart` is a **second, independent app entry point** — a
 question-bank editor, reusing `QuizQuestion`/`RichContent` from the main
 app but with its own `main()`/`MaterialApp`. It is never imported by
-`main.dart`; the only link between them is the notice box on the home
-screen (`QuizEditorNoticeBox` in `main.dart`) that opens the deployed
-`/edit-quiz` URL via `url_launcher`.
+`main.dart`, and as of the home screen's `QuizEditorNoticeBox` removal
+there is no in-app link to it at all — reach it only by navigating
+directly to the deployed `/edit-quiz` URL (still routed by the
+`firebase.json` rewrite, see "Deployment"). If an in-app entry point is
+wanted again, that's a new decision to make, not a restore of the old
+notice box — check with the user before re-adding one.
 
 - Persistence goes through `QuestionRepository` (`lib/admin/`), an
   interface with one implementation, `JsonQuestionRepository`: `loadAll()`
@@ -182,16 +184,24 @@ screen (`QuizEditorNoticeBox` in `main.dart`) that opens the deployed
 `ProgressScreen` (`lib/presentation/screens/progress_screen.dart`) is the
 home screen's "Lern-Statistiken" destination — a read-only aggregate view
 over `SessionHistoryStorage`, not a new data source. Flashcards and quiz
-both write to the same history (see "Quiz feature" above), so this screen
-doesn't distinguish between them; a "session" here means any rated run of
-either mode.
+both write to the same history (see "Quiz feature" above), tagged with a
+`SessionMode` (`flashcard`/`quiz`) on `SessionScore`. The screen shows a
+shared streak header plus a swipeable Karteikarten/Quiz tab pair — each
+tab backed by its own mode-scoped `ProgressStats`, so "Letzte Sessions",
+the trend chart, and the category breakdown are all per-mode; only the
+streak combines both.
 
-- `ProgressStatsService` (`lib/services/progress_stats_service.dart`) turns
-  the raw `List<SessionScore>` into everything the screen renders: overall
-  totals, a chronological trend (capped at the most recent 20 sessions),
-  a per-category accuracy breakdown, and the streak numbers. Pure/stateless
-  by design — call `.build(sessions)` fresh each load rather than caching,
+- `ProgressStatsService` (`lib/services/progress_stats_service.dart`) has
+  two entry points: `buildStreak(sessions)` (both modes together) and
+  `build(sessions, {required mode})` (everything else — totals, a
+  chronological trend capped at the most recent 20 sessions per mode, and
+  a per-category accuracy breakdown — filtered to one `SessionMode`).
+  Pure/stateless by design — call fresh each load rather than caching,
   history is already cheap to read.
+- `SessionScore.fromJson` defaults a missing/unknown `mode` key to
+  `SessionMode.flashcard`, since history entries saved before this split
+  predate quiz writing to the same store — don't change that default
+  without checking what it does to pre-split history.
 - **Streak is derived from `SessionScore.finishedAt` dates, not real app
   usage.** Ungraded topic-tile practice (`FlashcardScreen.category` /
   `QuizScreen.category`) isn't persisted anywhere, so it can't and doesn't
