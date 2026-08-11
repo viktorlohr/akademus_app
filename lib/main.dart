@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'presentation/screens/topic_selection_screen.dart';
 import 'presentation/screens/quiz_topic_selection_screen.dart';
+import 'presentation/screens/progress_screen.dart';
 import 'presentation/widgets/app_chrome.dart';
 
 /// Temporary pointer at the deployed quiz-editor admin page (see
@@ -79,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                   const MenuButton(
                     label: 'Lern-Statistiken',
                     icon: Icons.insert_chart_outlined,
-                    destination: PlaceholderScreen(title: ''),
+                    destination: ProgressScreen(),
                   ),
                   const SizedBox(height: 24),
                   const QuizEditorNoticeBox(),
@@ -89,30 +90,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// ─── PLACEHOLDER SCREEN ──────────────────────────────────────────────────────
-
-class PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const PlaceholderScreen({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/akademus_logo.jpg',
-          height: 80,
-          fit: BoxFit.contain,
-        ),
-        toolbarHeight: 100,
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
-      ),
-      body: AppBackground(child: Center(child: Text('$title kommt bald!'))),
     );
   }
 }

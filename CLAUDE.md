@@ -177,6 +177,35 @@ screen (`QuizEditorNoticeBox` in `main.dart`) that opens the deployed
   keep it that way.
 - Run it directly: `flutter run -d chrome --target=lib/admin_main.dart`.
 
+## Progress screen ("Lern-Statistiken")
+
+`ProgressScreen` (`lib/presentation/screens/progress_screen.dart`) is the
+home screen's "Lern-Statistiken" destination — a read-only aggregate view
+over `SessionHistoryStorage`, not a new data source. Flashcards and quiz
+both write to the same history (see "Quiz feature" above), so this screen
+doesn't distinguish between them; a "session" here means any rated run of
+either mode.
+
+- `ProgressStatsService` (`lib/services/progress_stats_service.dart`) turns
+  the raw `List<SessionScore>` into everything the screen renders: overall
+  totals, a chronological trend (capped at the most recent 20 sessions),
+  a per-category accuracy breakdown, and the streak numbers. Pure/stateless
+  by design — call `.build(sessions)` fresh each load rather than caching,
+  history is already cheap to read.
+- **Streak is derived from `SessionScore.finishedAt` dates, not real app
+  usage.** Ungraded topic-tile practice (`FlashcardScreen.category` /
+  `QuizScreen.category`) isn't persisted anywhere, so it can't and doesn't
+  feed the streak — only rated sessions count as "used the app that day".
+  If that ever feels wrong to a user, the fix is a new persisted "last
+  opened" signal, not stretching this calculation.
+- `TrendLineChart` (`lib/presentation/widgets/trend_line_chart.dart`) is a
+  hand-rolled `CustomPainter` line chart — no charting package is a
+  dependency of this project. Kept that way deliberately: it's one small
+  single-series chart, and pulling in a package raises the same `--wasm`
+  compatibility question called out for `url_launcher`/`flutter_html`
+  elsewhere in this file. If a second, more complex chart is ever needed,
+  reconsider then rather than preemptively.
+
 ## Deployment
 
 Firebase Hosting, project `akademus-app-preview`, config in
@@ -233,9 +262,6 @@ something this repo's build expects to find.
 
 ## Known placeholders / not yet implemented
 
-- Home screen's "Lern-Statistiken" button routes to `PlaceholderScreen` —
-  not built yet. `SessionHistoryStorage` already exists and is the natural
-  data source once it's built.
 - `/edit-quiz` has no access control — anyone with the URL can edit
   questions. Deliberately deferred, not an oversight.
 - No tests yet.

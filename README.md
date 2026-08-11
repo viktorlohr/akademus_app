@@ -77,18 +77,8 @@ git push origin feature/your-feature-name
 
 
 # 📝 TODO
->>>>>>> Stashed changes
-### Michi & Viktor
-- [ ] recherchieren, wie man ordentlich über git zusammenarbeitet. 
 
-### Michi
-- [ ] .gitignore einrichten (siehe PLEASE_USE_THIS_GITIGNORE)
-- [ ] Long-Term Stats
-
-### Viktor
-- [ ] auf firebase hosten
-- [ ] Session
-- [ ] Overview Screen
-- [ ] KI Agent raus
-- [ ] Quizfunktion
-- [ ] Karteikarten besser machen
+- Session artiges zeug rausnehmen aus nicht-session -> Die Kategorien Buttons sollen zu reinen "Overview-Screns" führen.
+- Session-Feature für Quiz
+- Viele ähnliche Quizfragen, großer Aufgabenpool, ähnliche (sogar nur andere Zahlen) Fragen sollen rotiert werden.
+- Langzeitstatistik (mit Import / Export)
