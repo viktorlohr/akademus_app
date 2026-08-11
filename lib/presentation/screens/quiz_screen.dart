@@ -14,8 +14,17 @@ class QuizScreen extends StatefulWidget {
 
   const QuizScreen({super.key, required this.config});
 
+  // Unlike FlashcardScreen.category, this doesn't reuse
+  // StudySessionConfig.single: that factory hard-codes shuffle: false,
+  // which for flashcards drives weakest-proficiency-first ordering. Quiz
+  // has no proficiency weighting, so topic-tile practice should just
+  // shuffle rather than replay questions in manifest order every time.
   QuizScreen.category(String category, {super.key})
-    : config = StudySessionConfig.single(category);
+    : config = StudySessionConfig(
+        title: category,
+        categories: [category],
+        shuffle: true,
+      );
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
