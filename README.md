@@ -74,8 +74,3 @@ git push origin feature/your-feature-name
 
 
 # 📝 TODO
-
-- Session artiges zeug rausnehmen aus nicht-session -> Die Kategorien Buttons sollen zu reinen "Overview-Screns" führen.
-- Session-Feature für Quiz
-- Viele ähnliche Quizfragen, großer Aufgabenpool, ähnliche (sogar nur andere Zahlen) Fragen sollen rotiert werden.
-- Langzeitstatistik (mit Import / Export)

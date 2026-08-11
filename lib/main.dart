@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'presentation/screens/topic_selection_screen.dart';
 import 'presentation/screens/quiz_topic_selection_screen.dart';
 import 'presentation/screens/progress_screen.dart';
 import 'presentation/widgets/app_chrome.dart';
-
-/// Temporary pointer at the deployed quiz-editor admin page (see
-/// firebase.json's /edit-quiz rewrite). Points at a specific Firebase
-/// project's domain, so update this if hosting ever moves.
-const String kQuizEditorUrl =
-    'https://akademus-app-preview.web.app/edit-quiz/';
 
 void main() => runApp(const MaterialApp(home: HomeScreen()));
 
@@ -82,64 +75,10 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.insert_chart_outlined,
                     destination: ProgressScreen(),
                   ),
-                  const SizedBox(height: 24),
-                  const QuizEditorNoticeBox(),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── QUIZ EDITOR NOTICE ──────────────────────────────────────────────────────
-
-class QuizEditorNoticeBox extends StatelessWidget {
-  const QuizEditorNoticeBox({super.key});
-
-  final Color myBlue = const Color(0xFF264358);
-  final Color myOrange = const Color(0xFFF5AC26);
-
-  Future<void> _open() =>
-      launchUrl(Uri.parse(kQuizEditorUrl), webOnlyWindowName: '_blank');
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 340),
-        child: Material(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(14),
-            onTap: _open,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.edit_note, color: myOrange),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      'So sieht der Quizeditor aus',
-                      style: TextStyle(
-                        color: myBlue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.open_in_new, color: myBlue, size: 16),
-                ],
-              ),
-            ),
-          ),
         ),
       ),
     );
