@@ -19,10 +19,6 @@ class FlashcardScreen extends StatefulWidget {
 
   const FlashcardScreen({super.key, required this.config});
 
-  /// Shorthand for "study this one topic, everything, weakest first".
-  FlashcardScreen.category(String category, {super.key})
-    : config = StudySessionConfig.single(category);
-
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
 }
