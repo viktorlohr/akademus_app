@@ -9,8 +9,11 @@ enum _Metric { accuracy, points }
 
 /// "Lern-Statistiken": long-term progress across every rated session
 /// (flashcards and quiz alike — they share one [SessionHistoryStorage], see
-/// CLAUDE.md's Quiz feature section), plus a day-streak derived from the
-/// same history.
+/// CLAUDE.md's Quiz feature section). The day-streak is a shared header
+/// (it's derived from both modes together, see [ProgressStatsService.
+/// buildStreak]); everything else — including "Letzte Sessions" — is split
+/// into a swipeable Karteikarten/Quiz pair of sub-views, each backed by its
+/// own mode-scoped [ProgressStats].
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
 
@@ -18,37 +21,37 @@ class ProgressScreen extends StatefulWidget {
   State<ProgressScreen> createState() => _ProgressScreenState();
 }
 
-class _ProgressScreenState extends State<ProgressScreen> {
+class _ProgressScreenState extends State<ProgressScreen>
+    with SingleTickerProviderStateMixin {
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
-  final Color myGreen = const Color(0xFF2E7D32);
-  final Color myRed = const Color(0xFFC62828);
 
   final _history = SessionHistoryStorage();
-  late Future<ProgressStats> _statsFuture;
-  _Metric _metric = _Metric.accuracy;
+  late final TabController _tabController;
+  late Future<_ProgressData> _dataFuture;
 
   @override
   void initState() {
     super.initState();
-    _statsFuture = _load();
+    _tabController = TabController(length: 2, vsync: this);
+    _dataFuture = _load();
   }
 
-  Future<ProgressStats> _load() async {
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Future<_ProgressData> _load() async {
     final sessions = await _history.getAll();
-    return ProgressStatsService().build(sessions);
-  }
-
-  Color _gradeColor(String grade) {
-    switch (grade) {
-      case 'A':
-      case 'B':
-        return myGreen;
-      case 'C':
-        return myOrange;
-      default:
-        return myRed;
-    }
+    final service = ProgressStatsService();
+    return _ProgressData(
+      streak: service.buildStreak(sessions),
+      flashcards: service.build(sessions, mode: SessionMode.flashcard),
+      quiz: service.build(sessions, mode: SessionMode.quiz),
+      isEmpty: sessions.isEmpty,
+    );
   }
 
   @override
@@ -65,15 +68,15 @@ class _ProgressScreenState extends State<ProgressScreen> {
         scrolledUnderElevation: 0,
       ),
       body: AppBackground(
-        child: FutureBuilder<ProgressStats>(
-          future: _statsFuture,
+        child: FutureBuilder<_ProgressData>(
+          future: _dataFuture,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
-            final stats = snapshot.data!;
-            if (stats.isEmpty) return _buildEmptyState(context);
-            return _buildStats(context, stats);
+            final data = snapshot.data!;
+            if (data.isEmpty) return _buildEmptyState(context);
+            return _buildStats(context, data);
           },
         ),
       ),
@@ -110,14 +113,73 @@ class _ProgressScreenState extends State<ProgressScreen> {
     );
   }
 
-  Widget _buildStats(BuildContext context, ProgressStats stats) {
+  Widget _buildStats(BuildContext context, _ProgressData data) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+          child: _streakCard(data.streak),
+        ),
+        const SizedBox(height: 14),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: TabBar(
+            controller: _tabController,
+            indicator: BoxDecoration(
+              color: myBlue,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.all(4),
+            dividerColor: Colors.transparent,
+            labelColor: myOrange,
+            unselectedLabelColor: myBlue,
+            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            tabs: const [
+              Tab(text: 'Karteikarten'),
+              Tab(text: 'Quiz'),
+            ],
+          ),
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildModeStats(data.flashcards, emptyHint:
+                  'Schließe eine bewertete Karteikarten-Session ab, um hier '
+                  'deinen Fortschritt zu sehen.'),
+              _buildModeStats(data.quiz, emptyHint:
+                  'Schließe ein bewertetes Quiz ab, um hier deinen '
+                  'Fortschritt zu sehen.'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildModeStats(ProgressStats stats, {required String emptyHint}) {
+    if (stats.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Text(
+            emptyHint,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+          ),
+        ),
+      );
+    }
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _streakCard(stats),
-          const SizedBox(height: 14),
           _summaryTiles(stats),
           const SizedBox(height: 14),
           _trendCard(stats),
@@ -143,7 +205,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
     child: child,
   );
 
-  Widget _streakCard(ProgressStats stats) {
+  Widget _streakCard(StreakStats streak) {
     const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     // Weekday (0 = Monday) of the strip's first (oldest) day, 6 days before today.
     final startWeekday = (DateTime.now().weekday - 1 - 6) % 7;
@@ -157,7 +219,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Row(
             children: [
               Text(
-                stats.currentStreak > 0 ? '🔥' : '💤',
+                streak.currentStreak > 0 ? '🔥' : '💤',
                 style: const TextStyle(fontSize: 32),
               ),
               const SizedBox(width: 12),
@@ -165,7 +227,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${stats.currentStreak} ${stats.currentStreak == 1 ? 'Tag' : 'Tage'} in Folge',
+                    '${streak.currentStreak} ${streak.currentStreak == 1 ? 'Tag' : 'Tage'} in Folge',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -173,8 +235,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     ),
                   ),
                   Text(
-                    'Beste Serie: ${stats.longestStreak} '
-                    '${stats.longestStreak == 1 ? 'Tag' : 'Tage'}',
+                    'Beste Serie: ${streak.longestStreak} '
+                    '${streak.longestStreak == 1 ? 'Tag' : 'Tage'}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withValues(alpha: 0.8),
@@ -188,7 +250,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(7, (i) {
-              final active = stats.last7Days[i];
+              final active = streak.last7Days[i];
               final isToday = i == 6;
               final label = weekdays[(startWeekday + i) % 7];
               return Column(
@@ -291,6 +353,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
       ),
     );
   }
+
+  _Metric _metric = _Metric.accuracy;
 
   Widget _metricToggle() {
     Widget segment(String label, _Metric value) {
@@ -444,4 +508,30 @@ class _ProgressScreenState extends State<ProgressScreen> {
       ),
     );
   }
+
+  Color _gradeColor(String grade) {
+    switch (grade) {
+      case 'A':
+      case 'B':
+        return const Color(0xFF2E7D32);
+      case 'C':
+        return myOrange;
+      default:
+        return const Color(0xFFC62828);
+    }
+  }
+}
+
+class _ProgressData {
+  final StreakStats streak;
+  final ProgressStats flashcards;
+  final ProgressStats quiz;
+  final bool isEmpty;
+
+  const _ProgressData({
+    required this.streak,
+    required this.flashcards,
+    required this.quiz,
+    required this.isEmpty,
+  });
 }

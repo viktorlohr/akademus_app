@@ -154,6 +154,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       known: _knownCount,
       maxStreak: _maxStreak,
       finishedAt: DateTime.now(),
+      mode: SessionMode.flashcard,
     );
 
     // Only graded runs go into history; practice shouldn't pollute it.

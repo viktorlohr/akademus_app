@@ -29,20 +29,33 @@ class CategoryBreakdown {
   });
 }
 
-/// Every number the progress screen needs, derived once from the rated
-/// session history. Pure/stateless on purpose — [SessionHistoryStorage] is
-/// already the source of truth, this just aggregates it.
+/// Day-streak numbers, shared across flashcards and quiz — see
+/// [ProgressStatsService.buildStreak].
+@immutable
+class StreakStats {
+  final int currentStreak;
+  final int longestStreak;
+
+  /// Last 7 calendar days, oldest first, whether a rated session (of
+  /// either mode) was finished that day.
+  final List<bool> last7Days;
+
+  const StreakStats({
+    required this.currentStreak,
+    required this.longestStreak,
+    required this.last7Days,
+  });
+}
+
+/// Every number the progress screen needs for one mode (flashcards or
+/// quiz), derived once from the rated session history. Pure/stateless on
+/// purpose — [SessionHistoryStorage] is already the source of truth, this
+/// just aggregates it.
 @immutable
 class ProgressStats {
   final int totalSessions;
   final int totalQuestions;
   final double overallAccuracy;
-  final int currentStreak;
-  final int longestStreak;
-
-  /// Last 7 calendar days, oldest first, whether a rated session was
-  /// finished that day.
-  final List<bool> last7Days;
 
   /// Chronological (oldest first), capped to the most recent
   /// [ProgressStatsService.trendLimit] sessions so the chart stays legible.
@@ -58,9 +71,6 @@ class ProgressStats {
     required this.totalSessions,
     required this.totalQuestions,
     required this.overallAccuracy,
-    required this.currentStreak,
-    required this.longestStreak,
-    required this.last7Days,
     required this.trend,
     required this.categoryBreakdown,
     required this.recentSessions,
@@ -71,22 +81,34 @@ class ProgressStats {
 
 /// Turns raw [SessionScore] history into everything the progress screen
 /// renders. Streaks and the "last 7 days" strip are derived from
-/// [SessionScore.finishedAt] since a rated session is the only signal we
-/// persist for "the user studied that day" — ungraded topic-tile practice
-/// isn't recorded, so it can't feed the streak.
+/// [SessionScore.finishedAt] across *both* modes (see [buildStreak]) since
+/// a rated session of either kind is the only signal we persist for "the
+/// user studied that day" — ungraded topic-tile practice isn't recorded,
+/// so it can't feed the streak. Everything else is scoped to a single
+/// [SessionMode] via [build], since "Letzte Sessions" and the rest of the
+/// screen are split by feature.
 class ProgressStatsService {
   static const trendLimit = 20;
   static const recentLimit = 5;
 
-  ProgressStats build(List<SessionScore> sessions) {
+  /// Streak numbers from the full history, regardless of mode.
+  StreakStats buildStreak(List<SessionScore> sessions) {
+    final activeDays = sessions.map((s) => _dateOnly(s.finishedAt)).toSet();
+    return StreakStats(
+      currentStreak: _currentStreak(activeDays),
+      longestStreak: _longestStreak(activeDays),
+      last7Days: _last7Days(activeDays),
+    );
+  }
+
+  /// Everything but the streak, scoped to [mode].
+  ProgressStats build(List<SessionScore> allSessions, {required SessionMode mode}) {
+    final sessions = allSessions.where((s) => s.mode == mode).toList();
     if (sessions.isEmpty) {
       return const ProgressStats(
         totalSessions: 0,
         totalQuestions: 0,
         overallAccuracy: 0,
-        currentStreak: 0,
-        longestStreak: 0,
-        last7Days: [false, false, false, false, false, false, false],
         trend: [],
         categoryBreakdown: [],
         recentSessions: [],
@@ -103,17 +125,10 @@ class ProgressStatsService {
       totalKnown += s.known;
     }
 
-    final activeDays = sessions
-        .map((s) => _dateOnly(s.finishedAt))
-        .toSet();
-
     return ProgressStats(
       totalSessions: sessions.length,
       totalQuestions: totalQuestions,
       overallAccuracy: totalQuestions > 0 ? totalKnown / totalQuestions : 0,
-      currentStreak: _currentStreak(activeDays),
-      longestStreak: _longestStreak(activeDays),
-      last7Days: _last7Days(activeDays),
       trend: chronological
           .skip(chronological.length > trendLimit
               ? chronological.length - trendLimit

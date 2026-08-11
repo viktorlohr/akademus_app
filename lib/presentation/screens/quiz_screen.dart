@@ -145,6 +145,7 @@ class _QuizScreenState extends State<QuizScreen> {
       known: _knownCount,
       maxStreak: _maxStreak,
       finishedAt: DateTime.now(),
+      mode: SessionMode.quiz,
     );
 
     SessionScore? best;

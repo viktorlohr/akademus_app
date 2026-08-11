@@ -1,5 +1,24 @@
 import 'package:meta/meta.dart';
 
+/// Which study feature produced a [SessionScore] — lets the progress
+/// screen split "Letzte Sessions" (and everything else but the streak)
+/// by feature instead of lumping flashcards and quiz together.
+enum SessionMode {
+  flashcard,
+  quiz;
+
+  String toJson() => name;
+
+  /// Sessions saved before this field existed don't have a `mode` key.
+  /// They all came from flashcards (quiz's history entries postdate this
+  /// split), so that's the safe default for missing/unknown values.
+  static SessionMode fromJson(String? value) =>
+      SessionMode.values.firstWhere(
+        (m) => m.name == value,
+        orElse: () => SessionMode.flashcard,
+      );
+}
+
 /// The graded outcome of one rated session. Separate from per-card
 /// proficiency on purpose: proficiency is long-term memory strength,
 /// this is "how did I do just now".
@@ -11,6 +30,7 @@ class SessionScore {
   final int known;
   final int maxStreak;
   final DateTime finishedAt;
+  final SessionMode mode;
 
   const SessionScore({
     required this.title,
@@ -19,6 +39,7 @@ class SessionScore {
     required this.known,
     required this.maxStreak,
     required this.finishedAt,
+    required this.mode,
   });
 
   double get accuracy => total > 0 ? known / total : 0.0;
@@ -50,11 +71,13 @@ class SessionScore {
     'known': known,
     'maxStreak': maxStreak,
     'finishedAt': finishedAt.toIso8601String(),
+    'mode': mode.toJson(),
   };
 
   factory SessionScore.fromJson(Map<String, dynamic> json) => SessionScore(
     title: json['title'] as String,
     categories: (json['categories'] as List).cast<String>(),
+    mode: SessionMode.fromJson(json['mode'] as String?),
     total: json['total'] as int,
     known: json['known'] as int,
     maxStreak: json['maxStreak'] as int,
