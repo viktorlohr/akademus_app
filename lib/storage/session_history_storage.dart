@@ -7,15 +7,31 @@ class SessionHistoryStorage {
   static const _key = 'session_history';
   static const _limit = 50;
 
+  /// Sessions finished before this date predate the per-category accuracy
+  /// fix (they only carry a session-wide known/total, not a breakdown per
+  /// category) and are purged on every read so stale, un-fixable entries
+  /// don't linger in a user's `SharedPreferences` forever.
+  static final _minFinishedAt = DateTime(2026, 8, 12);
+
   Future<List<SessionScore>> getAll() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_key);
     if (raw == null) return [];
     try {
       final decoded = jsonDecode(raw) as List;
-      return decoded
+      final all = decoded
           .map((e) => SessionScore.fromJson(e as Map<String, dynamic>))
           .toList();
+      final kept = all
+          .where((s) => !s.finishedAt.isBefore(_minFinishedAt))
+          .toList();
+      if (kept.length != all.length) {
+        await prefs.setString(
+          _key,
+          jsonEncode(kept.map((s) => s.toJson()).toList()),
+        );
+      }
+      return kept;
     } catch (_) {
       return [];
     }

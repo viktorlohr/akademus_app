@@ -197,8 +197,10 @@ class ProgressStatsService {
     final count = <String, int>{};
     for (final s in sessions) {
       for (final category in s.categories) {
-        known[category] = (known[category] ?? 0) + s.known;
-        total[category] = (total[category] ?? 0) + s.total;
+        final categoryTotal = s.categoryTotals[category] ?? 0;
+        if (categoryTotal == 0) continue;
+        known[category] = (known[category] ?? 0) + (s.categoryKnown[category] ?? 0);
+        total[category] = (total[category] ?? 0) + categoryTotal;
         count[category] = (count[category] ?? 0) + 1;
       }
     }

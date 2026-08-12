@@ -49,6 +49,8 @@ class _QuizScreenState extends State<QuizScreen> {
   int _currentStreak = 0;
   int _maxStreak = 0;
   bool _isFinishing = false;
+  final Map<String, int> _categoryTotals = {};
+  final Map<String, int> _categoryKnown = {};
 
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
@@ -110,12 +112,15 @@ class _QuizScreenState extends State<QuizScreen> {
       selectedOptionIds: _selectedOptionIds,
       typedAnswer: _answerController.text,
     );
+    final category = _current.category;
     setState(() {
       _wasCorrect = correct;
+      _categoryTotals[category] = (_categoryTotals[category] ?? 0) + 1;
       if (correct) {
         _knownCount++;
         _currentStreak++;
         if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
+        _categoryKnown[category] = (_categoryKnown[category] ?? 0) + 1;
       } else {
         _unknownCount++;
         _currentStreak = 0;
@@ -146,6 +151,8 @@ class _QuizScreenState extends State<QuizScreen> {
       maxStreak: _maxStreak,
       finishedAt: DateTime.now(),
       mode: SessionMode.quiz,
+      categoryTotals: _categoryTotals,
+      categoryKnown: _categoryKnown,
     );
 
     SessionScore? best;

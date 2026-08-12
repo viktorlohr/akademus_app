@@ -47,6 +47,8 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   int _unknownCount = 0;
   int _currentStreak = 0;
   int _maxStreak = 0;
+  final Map<String, int> _categoryTotals = {};
+  final Map<String, int> _categoryKnown = {};
 
   /// Guards against a second rating landing while the last card is still
   /// being persisted — swipe + button tap can otherwise both fire.
@@ -129,10 +131,13 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     await _flashcardService.rateCard(studyCard.card.id, known);
     if (!mounted) return;
 
+    final category = studyCard.card.category;
+    _categoryTotals[category] = (_categoryTotals[category] ?? 0) + 1;
     if (known) {
       _knownCount++;
       _currentStreak++;
       if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
+      _categoryKnown[category] = (_categoryKnown[category] ?? 0) + 1;
     } else {
       _unknownCount++;
       _currentStreak = 0;
@@ -155,6 +160,8 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       maxStreak: _maxStreak,
       finishedAt: DateTime.now(),
       mode: SessionMode.flashcard,
+      categoryTotals: _categoryTotals,
+      categoryKnown: _categoryKnown,
     );
 
     // Only graded runs go into history; practice shouldn't pollute it.

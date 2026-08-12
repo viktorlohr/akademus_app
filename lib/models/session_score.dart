@@ -32,6 +32,15 @@ class SessionScore {
   final DateTime finishedAt;
   final SessionMode mode;
 
+  /// Per-category breakdown of [total]/[known], keyed by category label —
+  /// lets the progress screen compute a correct accuracy per category
+  /// instead of crediting every category in [categories] with the whole
+  /// session's blended accuracy. Empty for history entries saved before
+  /// this field existed; those predate the fix and are purged on load
+  /// (see [SessionHistoryStorage]), so no reconstruction is attempted.
+  final Map<String, int> categoryTotals;
+  final Map<String, int> categoryKnown;
+
   const SessionScore({
     required this.title,
     required this.categories,
@@ -40,6 +49,8 @@ class SessionScore {
     required this.maxStreak,
     required this.finishedAt,
     required this.mode,
+    this.categoryTotals = const {},
+    this.categoryKnown = const {},
   });
 
   double get accuracy => total > 0 ? known / total : 0.0;
@@ -72,6 +83,8 @@ class SessionScore {
     'maxStreak': maxStreak,
     'finishedAt': finishedAt.toIso8601String(),
     'mode': mode.toJson(),
+    'categoryTotals': categoryTotals,
+    'categoryKnown': categoryKnown,
   };
 
   factory SessionScore.fromJson(Map<String, dynamic> json) => SessionScore(
@@ -82,5 +95,7 @@ class SessionScore {
     known: json['known'] as int,
     maxStreak: json['maxStreak'] as int,
     finishedAt: DateTime.parse(json['finishedAt'] as String),
+    categoryTotals: (json['categoryTotals'] as Map?)?.cast<String, int>() ?? const {},
+    categoryKnown: (json['categoryKnown'] as Map?)?.cast<String, int>() ?? const {},
   );
 }
