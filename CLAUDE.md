@@ -254,21 +254,27 @@ firebase deploy
 
 ## Android / Play Store signing
 
-`android/app/build.gradle.kts` signs release builds with the **debug**
-keystore (`signingConfig = signingConfigs.getByName("debug")`). This is
-intentional, not an unfinished TODO — the release signing key is
-deliberately kept out of this repo and off the developer's machine
-entirely. Whoever manages the Play Console upload holds their own keystore
-and re-signs the built `.aab` themselves before uploading:
-```
-jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
-  -keystore <their-release-keystore> app-release.aab <key-alias>
-```
-`jarsigner` overwrites the existing (debug) signature, so no change to
-this Gradle config is needed to support that. Don't add a `key.properties`
-/ release `signingConfig` here without checking with whoever owns the
-upload process first — that would put the release key back in play as
-something this repo's build expects to find.
+`android/app/build.gradle.kts` signs release builds with a real upload
+keystore, configured via `android/key.properties` (git-ignored, never
+commit it — see `android/.gitignore`). `key.properties` holds
+`storePassword`, `keyPassword`, `keyAlias`, and `storeFile` (an absolute
+path to the `.jks`, kept outside the repo, currently
+`~/upload-keystore.jks`). The Gradle config reads this file at
+`rootProject.file("key.properties")` and wires it as the `release`
+`signingConfig`; if the file is absent (e.g. CI, a fresh checkout without
+the keystore) it falls back to the debug keystore so `flutter run
+--release` still works without extra setup.
+
+This replaced an earlier setup where release builds were debug-signed and
+re-signed with `jarsigner` after the fact by whoever managed the Play
+Console upload. That's no longer how this repo works — `flutter build
+appbundle --release` now produces an already Play-Store-ready, correctly
+signed `.aab` directly, as long as `android/key.properties` and the
+keystore file it points to are present on the machine building it.
+Anyone building a release needs their own copy of both (out of band, not
+via this repo) — losing the keystore or its password means losing the
+ability to publish updates to the existing Play Store listing, so back
+both up somewhere durable.
 
 ## Known placeholders / not yet implemented
 
