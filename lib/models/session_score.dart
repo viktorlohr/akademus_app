@@ -56,25 +56,6 @@ class SessionScore {
   double get accuracy => total > 0 ? known / total : 0.0;
   int get percent => (accuracy * 100).round();
 
-  /// Streak is capped at a third of the deck so a 5-card session can't
-  /// out-grade a 40-card one on a lucky run.
-  int get points {
-    final streakBonus = total > 0
-        ? (maxStreak / total * 3).clamp(0.0, 1.0) * 20
-        : 0.0;
-    return (accuracy * 80 + streakBonus).round();
-  }
-
-  /// Schulnote-style band, since the audience is German pupils.
-  String get grade {
-    final p = points;
-    if (p >= 92) return 'A';
-    if (p >= 81) return 'B';
-    if (p >= 67) return 'C';
-    if (p >= 50) return 'D';
-    return 'E';
-  }
-
   Map<String, dynamic> toJson() => {
     'title': title,
     'categories': categories,

@@ -16,6 +16,10 @@
         "destination": "/assets/assets/datenschutz.html"
       },
       {
+        "source": "/impressum/**",
+        "destination": "/assets/assets/impressum.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

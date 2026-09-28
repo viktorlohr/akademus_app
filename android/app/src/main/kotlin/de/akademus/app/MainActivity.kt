@@ -1,4 +1,4 @@
-package de.akademus.karteikarten
+package de.akademus.app
 
 import io.flutter.embedding.android.FlutterActivity
 

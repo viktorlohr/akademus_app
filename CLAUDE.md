@@ -8,7 +8,7 @@ Guidance for Claude Code when working in this repo.
 app for pupils: flashcard study (Analysis, Geometrie, Stochastik), a quiz
 mode (Markdown + LaTeX questions, live-rendered), and a "Lern-Statistiken"
 progress screen (see "Progress screen" below). Deployed to Firebase Hosting
-at https://akademus-app-preview.web.app — see "Deployment" below.
+at https://akademus-3135e.web.app — see "Deployment" below.
 
 - All user-facing strings are German. Keep new UI text German unless told
   otherwise.
@@ -105,11 +105,14 @@ them or read one to compute the other.
 
 ## Scoring
 
-`SessionScore.points` and `.grade` (German A–E band) are computed, not
-stored — only the raw `total`/`known`/`maxStreak` are persisted, so changing
-the scoring formula in `session_score.dart` retroactively re-grades all
-history on next read. This is intentional; don't add a stored `points`
-field without good reason.
+`SessionScore` has no `points`/letter-grade concept — a points score and a
+Schulnote-style A–E band used to be computed getters on it, but they were
+removed as not meaningful to users. Everything derived from a session
+(personal-best comparisons, the progress-screen trend, "Letzte Sessions")
+is expressed via `accuracy`/`percent` instead. Only the raw
+`total`/`known`/`maxStreak` are persisted (computed, not stored), so a
+future derived metric can still retroactively apply to history on next
+read — don't add a stored score field without good reason.
 
 ## Conventions
 
@@ -218,7 +221,7 @@ streak combines both.
 
 ## Deployment
 
-Firebase Hosting, project `akademus-app-preview`, config in
+Firebase Hosting, project `akademus-3135e`, config in
 `firebase.json`. Two Flutter apps are deployed to *one* site as separate
 subpaths, not two Hosting sites — `deploy.sh` builds both (in this order;
 the main app owns `build/web` and must build first) and runs

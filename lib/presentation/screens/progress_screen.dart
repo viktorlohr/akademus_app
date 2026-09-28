@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import '../../models/session_score.dart';
 import '../../services/progress_stats_service.dart';
 import '../../storage/session_history_storage.dart';
+import '../../constants/categories.dart';
 import '../widgets/app_chrome.dart';
-import '../widgets/trend_line_chart.dart';
-
-enum _Metric { accuracy, points }
+import '../widgets/category_progress_chart.dart';
 
 /// "Lern-Statistiken": long-term progress across every rated session
 /// (flashcards and quiz alike — they share one [SessionHistoryStorage], see
@@ -25,6 +24,20 @@ class _ProgressScreenState extends State<ProgressScreen>
     with SingleTickerProviderStateMixin {
   final Color myBlue = const Color(0xFF264358);
   final Color myOrange = const Color(0xFFF5AC26);
+
+  // Per-category colors for the "Entwicklung" chart's lines, plus a
+  // separate color for the blended "Gesamt" line — distinct from myBlue/
+  // myOrange's other UI uses so all four lines stay visually distinct.
+  static const _analysisColor = Color(0xFFF5AC26);
+  static const _geometrieColor = Color(0xFF264358);
+  static const _stochastikColor = Color(0xFF2E7D32);
+  static const _gesamtColor = Color(0xFF5C6B73);
+  static const _categoryColors = <String, Color>{
+    'Analysis': _analysisColor,
+    'Geometrie': _geometrieColor,
+    'Stochastik': _stochastikColor,
+    'Gesamt': _gesamtColor,
+  };
 
   final _history = SessionHistoryStorage();
   late final TabController _tabController;
@@ -50,6 +63,9 @@ class _ProgressScreenState extends State<ProgressScreen>
       streak: service.buildStreak(sessions),
       flashcards: service.build(sessions, mode: SessionMode.flashcard),
       quiz: service.build(sessions, mode: SessionMode.quiz),
+      flashcardQuestionTrends:
+          service.buildQuestionTrends(sessions, mode: SessionMode.flashcard),
+      quizQuestionTrends: service.buildQuestionTrends(sessions, mode: SessionMode.quiz),
       isEmpty: sessions.isEmpty,
     );
   }
@@ -149,12 +165,18 @@ class _ProgressScreenState extends State<ProgressScreen>
           child: TabBarView(
             controller: _tabController,
             children: [
-              _buildModeStats(data.flashcards, emptyHint:
-                  'Schließe eine bewertete Karteikarten-Session ab, um hier '
-                  'deinen Fortschritt zu sehen.'),
-              _buildModeStats(data.quiz, emptyHint:
-                  'Schließe ein bewertetes Quiz ab, um hier deinen '
-                  'Fortschritt zu sehen.'),
+              _buildModeStats(
+                data.flashcards,
+                questionTrends: data.flashcardQuestionTrends,
+                emptyHint: 'Schließe eine bewertete Karteikarten-Session ab, um hier '
+                    'deinen Fortschritt zu sehen.',
+              ),
+              _buildModeStats(
+                data.quiz,
+                questionTrends: data.quizQuestionTrends,
+                emptyHint: 'Schließe ein bewertetes Quiz ab, um hier deinen '
+                    'Fortschritt zu sehen.',
+              ),
             ],
           ),
         ),
@@ -162,7 +184,11 @@ class _ProgressScreenState extends State<ProgressScreen>
     );
   }
 
-  Widget _buildModeStats(ProgressStats stats, {required String emptyHint}) {
+  Widget _buildModeStats(
+    ProgressStats stats, {
+    required QuestionTrends questionTrends,
+    required String emptyHint,
+  }) {
     if (stats.isEmpty) {
       return Center(
         child: Padding(
@@ -182,7 +208,7 @@ class _ProgressScreenState extends State<ProgressScreen>
         children: [
           _summaryTiles(stats),
           const SizedBox(height: 14),
-          _trendCard(stats),
+          _trendCard(questionTrends),
           if (stats.categoryBreakdown.isNotEmpty) ...[
             const SizedBox(height: 14),
             _categoryCard(stats),
@@ -242,6 +268,15 @@ class _ProgressScreenState extends State<ProgressScreen>
                       color: Colors.white.withValues(alpha: 0.8),
                     ),
                   ),
+                  if (streak.currentStreakStartDate != null)
+                    Text(
+                      'Streak begonnen am: '
+                      '${_formatDate(streak.currentStreakStartDate!)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
                 ],
               ),
             ],
@@ -316,23 +351,22 @@ class _ProgressScreenState extends State<ProgressScreen>
     );
   }
 
-  Widget _trendCard(ProgressStats stats) {
+  Widget _trendCard(QuestionTrends questionTrends) {
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Entwicklung',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: myBlue),
-              ),
-              _metricToggle(),
-            ],
+          Text(
+            'Entwicklung',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: myBlue),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Richtige Antworten je Session, nach Anzahl beantworteter Fragen.',
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           ),
           const SizedBox(height: 12),
-          if (stats.trend.length < 2)
+          if (questionTrends.overall.length < 2)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Text(
@@ -342,60 +376,60 @@ class _ProgressScreenState extends State<ProgressScreen>
               ),
             )
           else
-            TrendLineChart(
-              points: stats.trend,
-              valueOf: (p) => _metric == _Metric.accuracy ? p.accuracy * 100 : p.points.toDouble(),
-              formatValue: (v) => _metric == _Metric.accuracy ? '${v.round()}%' : '${v.round()}',
-              lineColor: myBlue,
-              dotColor: myOrange,
+            CategoryProgressChart(
+              maxX: questionTrends.totalQuestions,
+              series: [
+                for (final label in flashcardCategoryLabels)
+                  _categorySeries(label, _categoryColors[label]!, questionTrends),
+                QuestionTrendSeries(
+                  label: 'Gesamt',
+                  color: _gesamtColor,
+                  points: [
+                    for (final p in questionTrends.overall)
+                      (
+                        questionsAnswered: p.questionsAnswered,
+                        percent: p.accuracy * 100,
+                        total: p.cumulativeTotal,
+                        known: p.cumulativeKnown,
+                      ),
+                  ],
+                ),
+              ],
             ),
         ],
       ),
     );
   }
 
-  _Metric _metric = _Metric.accuracy;
-
-  Widget _metricToggle() {
-    Widget segment(String label, _Metric value) {
-      final selected = _metric == value;
-      return GestureDetector(
-        onTap: () => setState(() => _metric = value),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: selected ? myBlue : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+  QuestionTrendSeries _categorySeries(String label, Color color, QuestionTrends questionTrends) {
+    final points = questionTrends.byCategory[label] ?? const [];
+    return QuestionTrendSeries(
+      label: label,
+      color: color,
+      points: [
+        for (final p in points)
+          (
+            questionsAnswered: p.questionsAnswered,
+            percent: p.accuracy * 100,
+            total: p.cumulativeTotal,
+            known: p.cumulativeKnown,
           ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: selected ? myOrange : Colors.grey[600],
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          segment('Genauigkeit', _Metric.accuracy),
-          segment('Punkte', _Metric.points),
-        ],
-      ),
+      ],
     );
   }
 
   Widget _categoryCard(ProgressStats stats) {
+    // Same four series as the "Entwicklung" chart above (one bar per
+    // category plus a "Gesamt" bar), so both sections show the same four
+    // things.
+    final bars = [
+      ...stats.categoryBreakdown,
+      CategoryBreakdown(
+        category: 'Gesamt',
+        accuracy: stats.overallAccuracy,
+        sessionCount: stats.totalSessions,
+      ),
+    ];
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,9 +439,9 @@ class _ProgressScreenState extends State<ProgressScreen>
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: myBlue),
           ),
           const SizedBox(height: 14),
-          for (final c in stats.categoryBreakdown) ...[
+          for (final c in bars) ...[
             _categoryBar(c),
-            if (c != stats.categoryBreakdown.last) const SizedBox(height: 12),
+            if (c != bars.last) const SizedBox(height: 12),
           ],
         ],
       ),
@@ -415,6 +449,9 @@ class _ProgressScreenState extends State<ProgressScreen>
   }
 
   Widget _categoryBar(CategoryBreakdown c) {
+    // Same color as this category's line in the "Entwicklung" chart above,
+    // so the two sections read as one consistent picture.
+    final color = _categoryColors[c.category] ?? myBlue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -423,7 +460,7 @@ class _ProgressScreenState extends State<ProgressScreen>
           children: [
             Text(
               c.category,
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: myBlue),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color),
             ),
             Text(
               '${(c.accuracy * 100).round()}% · ${c.sessionCount} '
@@ -438,8 +475,8 @@ class _ProgressScreenState extends State<ProgressScreen>
           child: LinearProgressIndicator(
             value: c.accuracy,
             minHeight: 10,
-            backgroundColor: myBlue.withValues(alpha: 0.1),
-            valueColor: AlwaysStoppedAnimation<Color>(myBlue),
+            backgroundColor: color.withValues(alpha: 0.1),
+            valueColor: AlwaysStoppedAnimation<Color>(color),
           ),
         ),
       ],
@@ -462,28 +499,17 @@ class _ProgressScreenState extends State<ProgressScreen>
     );
   }
 
+  String _formatDate(DateTime date) {
+    final d = date.toLocal();
+    return '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year}';
+  }
+
   Widget _recentSessionRow(SessionScore s) {
-    final date = s.finishedAt.toLocal();
-    final dateStr =
-        '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+    final dateStr = _formatDate(s.finishedAt);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Container(
-            width: 34,
-            height: 34,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: _gradeColor(s.grade).withValues(alpha: 0.15),
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              s.grade,
-              style: TextStyle(fontWeight: FontWeight.bold, color: _gradeColor(s.grade)),
-            ),
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,30 +534,22 @@ class _ProgressScreenState extends State<ProgressScreen>
       ),
     );
   }
-
-  Color _gradeColor(String grade) {
-    switch (grade) {
-      case 'A':
-      case 'B':
-        return const Color(0xFF2E7D32);
-      case 'C':
-        return myOrange;
-      default:
-        return const Color(0xFFC62828);
-    }
-  }
 }
 
 class _ProgressData {
   final StreakStats streak;
   final ProgressStats flashcards;
   final ProgressStats quiz;
+  final QuestionTrends flashcardQuestionTrends;
+  final QuestionTrends quizQuestionTrends;
   final bool isEmpty;
 
   const _ProgressData({
     required this.streak,
     required this.flashcards,
     required this.quiz,
+    required this.flashcardQuestionTrends,
+    required this.quizQuestionTrends,
     required this.isEmpty,
   });
 }

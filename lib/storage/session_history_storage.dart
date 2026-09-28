@@ -55,7 +55,7 @@ class SessionHistoryStorage {
     SessionScore? best;
     for (final s in matches) {
       if (([...s.categories]..sort()).join('|') != key) continue;
-      if (best == null || s.points > best.points) best = s;
+      if (best == null || s.accuracy > best.accuracy) best = s;
     }
     return best;
   }

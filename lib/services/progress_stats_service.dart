@@ -6,12 +6,53 @@ import '../models/session_score.dart';
 class TrendPoint {
   final DateTime date;
   final double accuracy;
-  final int points;
 
   const TrendPoint({
     required this.date,
     required this.accuracy,
-    required this.points,
+  });
+}
+
+/// The running accuracy after one session, positioned by cumulative
+/// questions answered so far (in one category, or overall) rather than by
+/// date or session index — see [QuestionTrends]. [accuracy] is
+/// [cumulativeKnown] / [cumulativeTotal], i.e. the overall hit rate across
+/// every session up to and including this one — not just this session's
+/// own accuracy, which a single bad session could otherwise yank down to
+/// a misleading 0%.
+@immutable
+class QuestionTrendPoint {
+  final int questionsAnswered;
+  final double accuracy;
+  final int cumulativeTotal;
+  final int cumulativeKnown;
+
+  const QuestionTrendPoint({
+    required this.questionsAnswered,
+    required this.accuracy,
+    required this.cumulativeTotal,
+    required this.cumulativeKnown,
+  });
+}
+
+/// The "Entwicklung" card's per-mode chart data: an overall accuracy line
+/// plus one per category, all positioned along a shared x-axis of
+/// cumulative questions answered — see [ProgressStatsService.
+/// buildQuestionTrends].
+@immutable
+class QuestionTrends {
+  final List<QuestionTrendPoint> overall;
+  final Map<String, List<QuestionTrendPoint>> byCategory;
+
+  /// Total questions answered overall in this mode — the fixed right edge
+  /// of the chart's x-axis, since `overall.last.questionsAnswered` would
+  /// be the same value but this reads clearer at call sites.
+  final int totalQuestions;
+
+  const QuestionTrends({
+    required this.overall,
+    required this.byCategory,
+    required this.totalQuestions,
   });
 }
 
@@ -34,6 +75,11 @@ class CategoryBreakdown {
 @immutable
 class StreakStats {
   final int currentStreak;
+
+  /// The day the current streak began — null when [currentStreak] is 0
+  /// (no active streak to have a start date).
+  final DateTime? currentStreakStartDate;
+
   final int longestStreak;
 
   /// Last 7 calendar days, oldest first, whether a rated session (of
@@ -42,6 +88,7 @@ class StreakStats {
 
   const StreakStats({
     required this.currentStreak,
+    required this.currentStreakStartDate,
     required this.longestStreak,
     required this.last7Days,
   });
@@ -94,8 +141,10 @@ class ProgressStatsService {
   /// Streak numbers from the full history, regardless of mode.
   StreakStats buildStreak(List<SessionScore> sessions) {
     final activeDays = sessions.map((s) => _dateOnly(s.finishedAt)).toSet();
+    final current = _currentStreakInfo(activeDays);
     return StreakStats(
-      currentStreak: _currentStreak(activeDays),
+      currentStreak: current.count,
+      currentStreakStartDate: current.startDate,
       longestStreak: _longestStreak(activeDays),
       last7Days: _last7Days(activeDays),
     );
@@ -137,7 +186,6 @@ class ProgressStatsService {
             (s) => TrendPoint(
               date: s.finishedAt,
               accuracy: s.accuracy,
-              points: s.points,
             ),
           )
           .toList(),
@@ -146,12 +194,76 @@ class ProgressStatsService {
     );
   }
 
+  /// The "Entwicklung" card's per-category chart data, scoped to [mode].
+  /// Every line (overall and per-category) is positioned by *cumulative
+  /// questions answered so far*, not by date or session index, so a topic
+  /// practiced less ends up with a visibly shorter line — the three
+  /// per-category cumulative totals sum to [QuestionTrends.totalQuestions],
+  /// same as [QuestionTrends.overall]'s last point. Each point's `accuracy`
+  /// is likewise the *running* hit rate (cumulative known / cumulative
+  /// total up to and including that session), not that single session's
+  /// own accuracy — one bad session shouldn't be able to yank a point down
+  /// to a misleading 0% when the topic's overall rate is much higher. A
+  /// session only contributes a point to categories it actually covered
+  /// (`categoryTotals[c] > 0`), same weighting as [_categoryBreakdown].
+  /// Categories with zero sessions in this mode are simply absent from the
+  /// map — the caller decides whether that means "don't draw this line".
+  /// Not capped at [trendLimit]: capping would break the "starts at 0,
+  /// ends at the true total" axis this is built around.
+  QuestionTrends buildQuestionTrends(
+    List<SessionScore> allSessions, {
+    required SessionMode mode,
+  }) {
+    final chronological = allSessions.where((s) => s.mode == mode).toList()
+      ..sort((a, b) => a.finishedAt.compareTo(b.finishedAt));
+
+    var cumulativeTotal = 0;
+    var cumulativeKnown = 0;
+    final overall = <QuestionTrendPoint>[];
+    final categoryCumulativeTotal = <String, int>{};
+    final categoryCumulativeKnown = <String, int>{};
+    final byCategory = <String, List<QuestionTrendPoint>>{};
+
+    for (final s in chronological) {
+      cumulativeTotal += s.total;
+      cumulativeKnown += s.known;
+      overall.add(QuestionTrendPoint(
+        questionsAnswered: cumulativeTotal,
+        accuracy: cumulativeKnown / cumulativeTotal,
+        cumulativeTotal: cumulativeTotal,
+        cumulativeKnown: cumulativeKnown,
+      ));
+      for (final category in s.categories) {
+        final total = s.categoryTotals[category] ?? 0;
+        if (total == 0) continue;
+        final known = s.categoryKnown[category] ?? 0;
+        final newTotal = (categoryCumulativeTotal[category] ?? 0) + total;
+        final newKnown = (categoryCumulativeKnown[category] ?? 0) + known;
+        categoryCumulativeTotal[category] = newTotal;
+        categoryCumulativeKnown[category] = newKnown;
+        (byCategory[category] ??= []).add(
+          QuestionTrendPoint(
+            questionsAnswered: newTotal,
+            accuracy: newKnown / newTotal,
+            cumulativeTotal: newTotal,
+            cumulativeKnown: newKnown,
+          ),
+        );
+      }
+    }
+    return QuestionTrends(
+      overall: overall,
+      byCategory: byCategory,
+      totalQuestions: cumulativeTotal,
+    );
+  }
+
   DateTime _dateOnly(DateTime d) {
     final local = d.toLocal();
     return DateTime(local.year, local.month, local.day);
   }
 
-  int _currentStreak(Set<DateTime> activeDays) {
+  ({int count, DateTime? startDate}) _currentStreakInfo(Set<DateTime> activeDays) {
     var cursor = _dateOnly(DateTime.now());
     if (!activeDays.contains(cursor)) {
       // No session yet today — the streak isn't broken until the day ends,
@@ -159,11 +271,13 @@ class ProgressStatsService {
       cursor = cursor.subtract(const Duration(days: 1));
     }
     var streak = 0;
+    DateTime? startDate;
     while (activeDays.contains(cursor)) {
       streak++;
+      startDate = cursor;
       cursor = cursor.subtract(const Duration(days: 1));
     }
-    return streak;
+    return (count: streak, startDate: startDate);
   }
 
   int _longestStreak(Set<DateTime> activeDays) {

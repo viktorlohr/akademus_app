@@ -44,7 +44,6 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   bool _isFront = true;
 
   int _knownCount = 0;
-  int _unknownCount = 0;
   int _currentStreak = 0;
   int _maxStreak = 0;
   final Map<String, int> _categoryTotals = {};
@@ -139,7 +138,6 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
       _categoryKnown[category] = (_categoryKnown[category] ?? 0) + 1;
     } else {
-      _unknownCount++;
       _currentStreak = 0;
     }
 
@@ -238,53 +236,27 @@ class _FlashcardScreenState extends State<FlashcardScreen>
             ),
             const SizedBox(height: 12),
             if (_graded)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        // In a mixed session the deck title is generic, so
-                        // show which topic the current card actually is.
-                        widget.config.categories.length > 1
-                            ? studyCard.card.category
-                            : widget.config.title,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: myBlue,
-                        ),
-                      ),
-                      Text(
-                        '${_currentIndex + 1}/${_cards.length}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                    ],
+                  Text(
+                    // In a mixed session the deck title is generic, so
+                    // show which topic the current card actually is.
+                    widget.config.categories.length > 1
+                        ? studyCard.card.category
+                        : widget.config.title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: myBlue,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      _CompactStat(
-                        icon: Icons.check_circle,
-                        label: '$_knownCount',
-                        color: myGreen,
-                      ),
-                      const SizedBox(width: 8),
-                      _CompactStat(
-                        icon: Icons.local_fire_department,
-                        label: '$_currentStreak',
-                        color: myOrange,
-                      ),
-                      const SizedBox(width: 8),
-                      _CompactStat(
-                        icon: Icons.cancel,
-                        label: '$_unknownCount',
-                        color: myRed,
-                      ),
-                    ],
+                  Text(
+                    '${_currentIndex + 1}/${_cards.length}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[800],
+                    ),
                   ),
                 ],
               )
@@ -453,37 +425,6 @@ class _CardImage extends StatelessWidget {
 }
 
 // ─── HELPER WIDGETS ──────────────────────────────────────────────────────────
-
-class _CompactStat extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-
-  const _CompactStat({
-    required this.icon,
-    required this.label,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 16),
-        const SizedBox(width: 2),
-        Text(
-          label,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _RatingButton extends StatelessWidget {
   final String label;

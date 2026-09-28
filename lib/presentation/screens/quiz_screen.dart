@@ -45,7 +45,6 @@ class _QuizScreenState extends State<QuizScreen> {
   bool? _wasCorrect;
 
   int _knownCount = 0;
-  int _unknownCount = 0;
   int _currentStreak = 0;
   int _maxStreak = 0;
   bool _isFinishing = false;
@@ -122,7 +121,6 @@ class _QuizScreenState extends State<QuizScreen> {
         if (_currentStreak > _maxStreak) _maxStreak = _currentStreak;
         _categoryKnown[category] = (_categoryKnown[category] ?? 0) + 1;
       } else {
-        _unknownCount++;
         _currentStreak = 0;
       }
     });
@@ -277,11 +275,6 @@ class _QuizScreenState extends State<QuizScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  _CompactStat(icon: Icons.check_circle, label: '$_knownCount', color: myGreen),
-                  const SizedBox(width: 8),
-                  _CompactStat(icon: Icons.local_fire_department, label: '$_currentStreak', color: myOrange),
-                  const SizedBox(width: 8),
-                  _CompactStat(icon: Icons.cancel, label: '$_unknownCount', color: myRed),
                   const Spacer(),
                   ElevatedButton(
                     onPressed: _wasCorrect == null
@@ -453,24 +446,3 @@ class _OptionTile extends StatelessWidget {
   }
 }
 
-// ─── HELPER WIDGETS ──────────────────────────────────────────────────────────
-
-class _CompactStat extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-
-  const _CompactStat({required this.icon, required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 16),
-        const SizedBox(width: 2),
-        Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 14)),
-      ],
-    );
-  }
-}

@@ -13,7 +13,7 @@ GmbH. Two study modes share one scoring/history system:
 A separate admin page (`lib/admin_main.dart`, deployed at `/edit-quiz`)
 lets question-bank content be edited without touching the main app.
 
-Deployed to Firebase Hosting: https://akademus-app-preview.web.app
+Deployed to Firebase Hosting: https://akademus-3135e.web.app
 
 See [CLAUDE.md](CLAUDE.md) for architecture, conventions, and deployment
 details.
