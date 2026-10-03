@@ -4,7 +4,12 @@ import 'presentation/screens/quiz_topic_selection_screen.dart';
 import 'presentation/screens/progress_screen.dart';
 import 'presentation/widgets/app_chrome.dart';
 
-void main() => runApp(const MaterialApp(home: HomeScreen()));
+void main() => runApp(
+  MaterialApp(
+    theme: ThemeData(fontFamily: 'Inter'),
+    home: const HomeScreen(),
+  ),
+);
 
 // ─── HOME SCREEN ─────────────────────────────────────────────────────────────
 
