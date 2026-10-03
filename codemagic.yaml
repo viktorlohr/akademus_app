@@ -6,6 +6,8 @@ workflows:
     integrations:
       app_store_connect: codemagic_app_store_connect
     environment:
+      groups:
+        - ios_signing
       vars:
         BUNDLE_ID: de.akademus.karteikarten
       flutter: stable
