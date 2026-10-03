@@ -261,12 +261,23 @@ firebase deploy
 keystore, configured via `android/key.properties` (git-ignored, never
 commit it — see `android/.gitignore`). `key.properties` holds
 `storePassword`, `keyPassword`, `keyAlias`, and `storeFile` (an absolute
-path to the `.jks`, kept outside the repo, currently
-`~/upload-keystore.jks`). The Gradle config reads this file at
+path to the `.jks`). The Gradle config reads this file at
 `rootProject.file("key.properties")` and wires it as the `release`
 `signingConfig`; if the file is absent (e.g. CI, a fresh checkout without
 the keystore) it falls back to the debug keystore so `flutter run
 --release` still works without extra setup.
+
+The keystore itself (`upload-keystore.jks`) previously lived in
+`Signatur/` inside the project folder — gitignored, but on-disk inside a
+directory that could get deleted along with the repo checkout. It has
+since been backed up to a separate, durable location outside this
+project. **Before removing the local `Signatur/` folder**, update
+`storeFile` in `android/key.properties` to point at wherever that backup
+now lives, otherwise release builds on this machine will silently start
+falling back to debug signing instead of failing loudly. A fresh checkout
+in the future needs its own `key.properties` recreated to point at that
+backup, plus the keystore password (store it in a password manager, not
+just alongside the file).
 
 This replaced an earlier setup where release builds were debug-signed and
 re-signed with `jarsigner` after the fact by whoever managed the Play
