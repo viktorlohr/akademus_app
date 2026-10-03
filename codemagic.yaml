@@ -9,6 +9,8 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: de.akademus.karteikarten
+      vars:
+        BUNDLE_ID: de.akademus.karteikarten
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -24,6 +26,11 @@ workflows:
     scripts:
       - name: Get Flutter packages
         script: flutter pub get
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
       - name: Set up code signing
         script: |
           xcode-project use-profiles
