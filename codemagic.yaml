@@ -33,6 +33,9 @@ workflows:
       - name: Set up code signing
         script: |
           xcode-project use-profiles
+      - name: Install CocoaPods dependencies
+        script: |
+          find . -name "Podfile" -maxdepth 2 -execdir pod install \;
       - name: Build IPA
         script: |
           flutter build ipa --release \
