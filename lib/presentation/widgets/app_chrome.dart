@@ -8,44 +8,55 @@ class GlobalFooterWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(padding: const EdgeInsets.only(bottom: 0), child: child),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PrivacyInfoScreen()),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 2),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-              // decoration: BoxDecoration(
-              //   color: const Color.fromARGB(255, 214, 210, 210).withValues(alpha: 0.5),
-              //   borderRadius: BorderRadius.circular(8),
-              // ),
-              child: const Text(
-                'Impressum | Datenschutz',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 4,
-                      color: Colors.black,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
+    // bottom: true keeps both the page content's bottom-anchored buttons
+    // and the footer link clear of Android's gesture nav bar / home
+    // indicator; top: false since every screen using this wrapper already
+    // has an AppBar handling the top inset.
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Stack(
+        children: [
+          Padding(padding: const EdgeInsets.only(bottom: 0), child: child),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PrivacyInfoScreen()),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 2,
                 ),
-                textAlign: TextAlign.center,
+                // decoration: BoxDecoration(
+                //   color: const Color.fromARGB(255, 214, 210, 210).withValues(alpha: 0.5),
+                //   borderRadius: BorderRadius.circular(8),
+                // ),
+                child: const Text(
+                  'Impressum | Datenschutz',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 4,
+                        color: Colors.black,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

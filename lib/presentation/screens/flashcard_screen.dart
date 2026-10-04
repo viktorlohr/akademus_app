@@ -219,169 +219,178 @@ class _FlashcardScreenState extends State<FlashcardScreen>
         scrolledUnderElevation: 0,
         foregroundColor: myOrange,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 6,
-                backgroundColor: Colors.grey.withValues(alpha: 0.5),
-                valueColor: AlwaysStoppedAnimation<Color>(myOrange),
+      // bottom: true keeps the Falsch/Richtig/Weiter buttons clear of
+      // Android's gesture nav bar; top: false since the AppBar already
+      // handles the top inset. This screen doesn't go through
+      // GlobalFooterWrapper/AppBackground (no footer here), so it needs
+      // its own SafeArea rather than inheriting one.
+      body: SafeArea(
+        top: false,
+        bottom: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 6,
+                  backgroundColor: Colors.grey.withValues(alpha: 0.5),
+                  valueColor: AlwaysStoppedAnimation<Color>(myOrange),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            if (_graded)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    // In a mixed session the deck title is generic, so
-                    // show which topic the current card actually is.
-                    widget.config.categories.length > 1
-                        ? studyCard.card.category
-                        : widget.config.title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: myBlue,
+              const SizedBox(height: 12),
+              if (_graded)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      // In a mixed session the deck title is generic, so
+                      // show which topic the current card actually is.
+                      widget.config.categories.length > 1
+                          ? studyCard.card.category
+                          : widget.config.title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: myBlue,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${_currentIndex + 1}/${_cards.length}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[800],
+                    Text(
+                      '${_currentIndex + 1}/${_cards.length}',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[800]),
                     ),
-                  ),
-                ],
-              )
-            else
-              Text(
-                '${_currentIndex + 1}/${_cards.length}',
-                style: TextStyle(fontSize: 12, color: Colors.grey[800]),
-              ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: kCardAspectRatio,
-                  child: AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      final angle = _animation.value * pi;
-                      final showBack = angle > pi / 2;
+                  ],
+                )
+              else
+                Text(
+                  '${_currentIndex + 1}/${_cards.length}',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[800]),
+                ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: kCardAspectRatio,
+                    child: AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        final angle = _animation.value * pi;
+                        final showBack = angle > pi / 2;
 
-                      Matrix4 perspective() =>
-                          Matrix4.identity()..setEntry(3, 2, 0.001);
+                        Matrix4 perspective() =>
+                            Matrix4.identity()..setEntry(3, 2, 0.001);
 
-                      return Stack(
-                        children: [
-                          Visibility(
-                            visible: !showBack,
-                            maintainSize: true,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            child: GestureDetector(
-                              onTap: _flipCard,
-                              onHorizontalDragEnd: _handleHorizontalDrag,
-                              child: Transform(
-                                transform: perspective()..rotateY(angle),
-                                alignment: Alignment.center,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: _CardImage(
-                                    assetPath: studyCard.card.frontImage,
+                        return Stack(
+                          children: [
+                            Visibility(
+                              visible: !showBack,
+                              maintainSize: true,
+                              maintainAnimation: true,
+                              maintainState: true,
+                              child: GestureDetector(
+                                onTap: _flipCard,
+                                onHorizontalDragEnd: _handleHorizontalDrag,
+                                child: Transform(
+                                  transform: perspective()..rotateY(angle),
+                                  alignment: Alignment.center,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: _CardImage(
+                                      assetPath: studyCard.card.frontImage,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Visibility(
-                            visible: showBack,
-                            maintainSize: true,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            child: GestureDetector(
-                              onTap: _flipCard,
-                              onHorizontalDragEnd: _handleHorizontalDrag,
-                              child: Transform(
-                                transform: perspective()..rotateY(angle - pi),
-                                alignment: Alignment.center,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: _CardImage(
-                                    assetPath: studyCard.card.backImage,
+                            Visibility(
+                              visible: showBack,
+                              maintainSize: true,
+                              maintainAnimation: true,
+                              maintainState: true,
+                              child: GestureDetector(
+                                onTap: _flipCard,
+                                onHorizontalDragEnd: _handleHorizontalDrag,
+                                child: Transform(
+                                  transform: perspective()..rotateY(angle - pi),
+                                  alignment: Alignment.center,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: _CardImage(
+                                      assetPath: studyCard.card.backImage,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_graded)
-              AnimatedOpacity(
-                opacity: _isFront ? 0.0 : 1.0,
-                duration: const Duration(milliseconds: 300),
-                child: IgnorePointer(
-                  ignoring: _isFront,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _RatingButton(
-                          label: 'Falsch',
-                          icon: Icons.close,
-                          color: myRed,
-                          onPressed: () => _rate(false),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _RatingButton(
-                          label: 'Richtig',
-                          icon: Icons.check,
-                          color: myGreen,
-                          onPressed: () => _rate(true),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            else
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: isLast ? null : _nextCard,
-                  icon: const Icon(Icons.arrow_forward),
-                  label: const Text(
-                    'Weiter',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: myBlue,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[400],
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                          ],
+                        );
+                      },
                     ),
-                    elevation: 4,
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
-          ],
+              const SizedBox(height: 16),
+              if (_graded)
+                AnimatedOpacity(
+                  opacity: _isFront ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: IgnorePointer(
+                    ignoring: _isFront,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _RatingButton(
+                            label: 'Falsch',
+                            icon: Icons.close,
+                            color: myRed,
+                            onPressed: () => _rate(false),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _RatingButton(
+                            label: 'Richtig',
+                            icon: Icons.check,
+                            color: myGreen,
+                            onPressed: () => _rate(true),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: isLast ? null : _nextCard,
+                    icon: const Icon(Icons.arrow_forward),
+                    label: const Text(
+                      'Weiter',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: myBlue,
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor: Colors.grey[400],
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
