@@ -23,6 +23,8 @@ workflows:
         - pattern: main
           include: true
     scripts:
+      - name: Set up keychain to be used for codesigning using Codemagic CLI 'keychain' command
+        script: keychain initialize
       - name: Get Flutter packages
         script: flutter pub get
       - name: Fetch signing files
