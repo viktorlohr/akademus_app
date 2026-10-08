@@ -35,7 +35,7 @@ class StatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isRecord =
         config.rated &&
-        (previousBest == null || score.points > previousBest!.points);
+        (previousBest == null || score.percent > previousBest!.percent);
 
     return Scaffold(
       appBar: AppBar(
@@ -91,66 +91,12 @@ class StatsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 14),
 
-              // Grade card — only meaningful for rated runs.
+              // Personal-best comparison — only meaningful for rated runs.
               if (config.rated) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 18,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            score.grade,
-                            style: TextStyle(
-                              fontSize: 44,
-                              fontWeight: FontWeight.bold,
-                              color: myOrange,
-                            ),
-                          ),
-                          Text(
-                            'Note',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '${score.points}',
-                            style: TextStyle(
-                              fontSize: 44,
-                              fontWeight: FontWeight.bold,
-                              color: myBlue,
-                            ),
-                          ),
-                          Text(
-                            'Punkte',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
                 Text(
                   isRecord
                       ? 'Neue Bestleistung!'
-                      : 'Bestleistung: ${previousBest!.points} Punkte',
+                      : 'Bestleistung: ${previousBest!.percent}% gewusst',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 13,

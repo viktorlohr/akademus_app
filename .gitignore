@@ -114,6 +114,12 @@ coverage/
 .env
 .env.*
 
-# firebase 
+# firebase
 .firebase/
+
+# Signing material (upload keystore + its password) — never commit these.
+/Signatur/
+/signatur/
+*.jks
+*.keystore
 

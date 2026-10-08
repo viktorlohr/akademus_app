@@ -16,6 +16,7 @@ class AdminApp extends StatelessWidget {
       theme: ThemeData(
         colorSchemeSeed: const Color(0xFF264358),
         useMaterial3: true,
+        fontFamily: 'Inter',
       ),
       home: const AdminHomeScreen(),
     );

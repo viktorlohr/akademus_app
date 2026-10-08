@@ -2,7 +2,7 @@ name: akademus_app
 description: "App by Akademus GmbH"
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.1.1+4
 
 environment:
   sdk: ^3.11.5
@@ -18,18 +18,40 @@ dependencies:
   markdown: ^7.3.1
   web: ^1.1.1
   flutter_html: ^3.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   change_app_package_name: ^1.5.0
+  flutter_launcher_icons: ^0.14.3
+
+# Drop the Akademus app icon (square PNG, ideally 1024x1024, no transparency
+# for Android adaptive icons) at assets/icon/icon.png, then run:
+#   dart run flutter_launcher_icons
+# This regenerates the Android mipmap icons (currently still the Flutter
+# template placeholder), ios/Runner/Assets.xcassets/AppIcon.appiconset, and
+# the web/icons/*.png + web/favicon.png referenced by web/manifest.json and
+# web/index.html — so Android, iOS, and the PWA/browser-tab icon all update
+# from one source file.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "#264358"
+    theme_color: "#264358"
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
     - assets/datenschutz.html
+    - assets/impressum.html
     - assets/images/
     - assets/flashcards/
     - assets/flashcards/analysis/
@@ -37,3 +59,19 @@ flutter:
     - assets/flashcards/stochastik/
     - assets/flashcards_manifest.json
     - assets/quiz_manifest.json
+  # Inter (OFL-licensed, bundled locally — see assets/fonts/Inter-OFL.txt) as
+  # the app-wide font, so text renders identically across devices instead of
+  # falling back to whatever system font each phone/browser ships. Variable
+  # font: multiple weight entries point at the same file; Flutter resolves
+  # each FontWeight to that file's matching variable-font instance.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 700
